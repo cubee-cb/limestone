@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 13:09:27",modified="2025-04-15 17:34:54",revision=815]]
+--[[pod_format="raw",created="2025-04-15 13:09:27",modified="2025-04-15 17:47:24",revision=861]]
 -- pickup
 -- cubee
 
@@ -38,7 +38,7 @@ Particle = setmetatable({
 	end,
 }, {__index = Entity})
 
--- create entity
+-- create particle
 function Particle:create(u, x, y, xv, yv)
 	x = x or 128
 	y = y or 16
@@ -69,6 +69,7 @@ function Particle:create(u, x, y, xv, yv)
 	return en
 end
 
+-- update all particles and handle garbage particles
 function Particle.updateAll()
 	Particle.garbage = {}
 
@@ -83,12 +84,14 @@ function Particle.updateAll()
 
 end
 
+-- draw all particles
 function Particle.drawAll(foreground)
 	for p in all(Particle.particles) do
 		p:draw(foreground)
 	end
 end
 
+-- base update
 function Particle.update(_ENV)
 
 	myUpdate(_ENV)
@@ -105,6 +108,7 @@ function Particle.update(_ENV)
 	return x, y - hitbox.h
 end
 
+-- base draw
 function Particle.draw(_ENV, foreground)
 	if (fg != foreground) return
 

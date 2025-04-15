@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 05:50:13",modified="2025-04-15 17:34:54",revision=1030]]
+--[[pod_format="raw",created="2025-04-15 05:50:13",modified="2025-04-15 17:47:24",revision=1076]]
 -- pickup
 -- cubee
 
@@ -8,7 +8,7 @@ Pickup = setmetatable({
 	gfx = fetch("gfx/pickup.gfx")
 }, {__index = Entity})
 
--- create entity
+-- create pickup
 function Pickup:create(x, y)
 	x = x or 128
 	y = y or 16
@@ -38,6 +38,7 @@ function Pickup:create(x, y)
 	return en
 end
 
+-- update all pickups and handle garbage pickups
 function Pickup.updateAll()
 	Pickup.garbage = {}
 
@@ -52,12 +53,14 @@ function Pickup.updateAll()
 
 end
 
+-- draw all pickups
 function Pickup.drawAll()
 	for e in all(Pickup.pickups) do
 		e:draw()
 	end
 end
 
+-- base update
 function Pickup.update(_ENV)
 
 	local closestPlayer, distance = closest(_ENV, Player.players)
@@ -110,6 +113,7 @@ function Pickup.update(_ENV)
 	return x, y - hitbox.h
 end
 
+-- base draw
 function Pickup.draw(_ENV)
 	spr(gfx[0].bmp, x - 4, y - 8)
 	--debugVisuals(_ENV)

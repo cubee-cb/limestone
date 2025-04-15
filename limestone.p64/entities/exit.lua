@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 02:01:34",modified="2025-04-15 17:34:54",revision=1555]]
+--[[pod_format="raw",created="2025-04-15 02:01:34",modified="2025-04-15 17:47:24",revision=1600]]
 -- exit
 -- cubee
 
@@ -29,6 +29,7 @@ function Exit:create(x, y)
 	return ex
 end
 
+-- update all exits and average camera position
 function Exit.updateAll()
 	local cx, cy = 0, 0
 	for e in all(Exit.exits) do
@@ -42,12 +43,14 @@ function Exit.updateAll()
 	return cx, cy
 end
 
+-- draw all exits
 function Exit.drawAll()
 	for e in all(Exit.exits) do
 		e:draw()
 	end
 end
 
+-- base update
 function Exit.update(_ENV)
 
 	while not (fget(cmget(x, y), 0) or fget(cmget(x, y), 2)) and y < 1000 do
@@ -60,6 +63,7 @@ function Exit.update(_ENV)
 	return x, y - hitbox.h
 end
 
+-- base draw
 function Exit.draw(_ENV)
 	spr(gfx[1].bmp, x - 16, y - 82.5 + sin(t / 240) * 3)
 	spr(gfx[0].bmp, x - 24, y - 80)

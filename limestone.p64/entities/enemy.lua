@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 01:28:55",modified="2025-04-15 17:34:54",revision=1748]]
+--[[pod_format="raw",created="2025-04-15 01:28:55",modified="2025-04-15 17:47:24",revision=1794]]
 -- enemies base
 -- cubee
 
@@ -31,6 +31,7 @@ function Enemy:create(x, y)
 	return enemy
 end
 
+-- set target of enemy
 function Enemy.updateTarget(_ENV, targ)
 	target = targ
 	if not target then
@@ -38,6 +39,7 @@ function Enemy.updateTarget(_ENV, targ)
 	end
 end
 
+-- update all enemies and averge camera position
 function Enemy.updateAll()
 	local cx, cy = 0, 0
 
@@ -58,12 +60,14 @@ function Enemy.updateAll()
 	return cx, cy
 end
 
+-- draw all enemies
 function Enemy.drawAll()
 	for e in all(Enemy.enemies) do
 		e:draw()
 	end
 end
 
+-- base update
 function Enemy.update(_ENV)
 	updateTarget(_ENV, closest(_ENV, Exit.exits))
 
@@ -202,6 +206,7 @@ function Enemy.update(_ENV)
 	return x, y - hitbox.h
 end
 
+-- base draw
 function Enemy.draw(_ENV)
 	spr(gfx[0].bmp, x - 4, y - 16)
 

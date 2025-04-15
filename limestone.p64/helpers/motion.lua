@@ -1,6 +1,8 @@
---[[pod_format="raw",created="2025-04-13 15:59:04",modified="2025-04-15 17:34:54",revision=2615]]
+--[[pod_format="raw",created="2025-04-13 15:59:04",modified="2025-04-15 17:47:24",revision=2660]]
 -- motion helpers
 -- cubee
+-- ref:
+-- https://easings.net/
 
 function elasticFollow(_env, xt, yt)
 	x += (xt - x) / 10

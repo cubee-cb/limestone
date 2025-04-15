@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 02:20:17",modified="2025-04-15 17:34:54",revision=1492]]
+--[[pod_format="raw",created="2025-04-15 02:20:17",modified="2025-04-15 17:47:24",revision=1538]]
 -- entity
 -- cubee
 
@@ -27,6 +27,7 @@ function Entity.create(x, y)
 	return en
 end
 
+-- update all entities
 function Entity.updateAll()
 	local cx, cy = 0, 0
 	for e in all(Entity.entities) do
@@ -40,12 +41,14 @@ function Entity.updateAll()
 	return cx, cy
 end
 
+-- draw all entities
 function Entity.drawAll()
 	for e in all(Entity.entities) do
 		e:draw()
 	end
 end
 
+-- base update
 function Entity.update(_ENV)
 
 	t = max(t + 1)
@@ -54,6 +57,7 @@ function Entity.update(_ENV)
 	return x, y - hitbox.h
 end
 
+-- base draw
 function Entity.draw(_ENV)
 	spr(gfx[0].bmp, x - 16, y - 32)
 
@@ -62,6 +66,8 @@ function Entity.draw(_ENV)
 	print("hp: " .. hp, x + 16, y, 9)
 end
 
+-- find nearest object in pool, optional range limit
+-- returns found object or false, and shortest range
 function closest(me, pool, range)
 	local near = false
 	local range = range or 256
@@ -75,6 +81,7 @@ function closest(me, pool, range)
 	return near, range
 end
 
+-- general debug visuals: hitboxes, origins, aim, etc
 function Entity.debugVisuals(_ENV)
 	if (not debug) return
 

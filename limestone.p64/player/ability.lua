@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 05:09:42",modified="2025-04-15 17:34:54",revision=1129]]
+--[[pod_format="raw",created="2025-04-15 05:09:42",modified="2025-04-15 17:47:24",revision=1175]]
 -- ability
 -- cubee
 
@@ -10,13 +10,14 @@ Ability = {
 			xv = flip and -5 or 5
 			yv = -1
 		end
+		-- todo: add dash binding
 	},
 
 	wings = {
 		name = "Wings",
 		desc = "Grants 2 extra jumps",
 		equip = function(_ENV)
-			_ENV.maxJumps += 2 -- this doesn't work somehow
+			--_ENV.maxJumps += 2 -- this doesn't work somehow
 			maxJumps = 4
 		end
 	},
@@ -24,21 +25,25 @@ Ability = {
 	wallJump = {
 		name = "Magnet Fingers",
 		desc = "Grants the ability to slide and jump on walls",
+		-- todo: lock walljump behind this
 	},
 
 	monkeyBars = {
 		name = "Portable Monkey Bars",
 		desc = "Hold UP to climb along ceilings",
+		-- todo: add roof climbing
 	},
 
 	dive = {
 		name = "Dive",
 		desc = "",
+		-- todo
 	},
 
 	push = {
 		name = "Push",
 		desc = "push things idk",
+		-- todo
 	},
 
 	homingAttack = {
@@ -48,6 +53,7 @@ Ability = {
 			xv, yv = 1, 1
 			local closest = closest(_ENV, Enemy.enemies)
 		end
+		-- todo: implement dash properly
 	},
 
 }

@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-15 17:34:54",revision=3000]]
+--[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-15 17:47:24",revision=3047]]
 -- player
 -- cubee
 
@@ -68,6 +68,7 @@ function Player.collect(_ENV, type, value)
 	points[type] += value
 end
 
+-- update all players and average returned camera values
 function Player.updateAll()
 	local cx, cy = 0, 0
 	for p in all(Player.players) do
@@ -81,12 +82,14 @@ function Player.updateAll()
 	return cx, cy
 end
 
+-- draw all players
 function Player.drawAll()
 	for p in all(Player.players) do
 		p:draw()
 	end
 end
 
+-- base update
 function Player.update(_ENV)
 
 	-- update abilities
@@ -347,6 +350,7 @@ function Player.update(_ENV)
 	return x, ground_last_y - hitbox.h - 32
 end
 
+-- base draw
 function Player.draw(_ENV)
 
 	-- rear arm
