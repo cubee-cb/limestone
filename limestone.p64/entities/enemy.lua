@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 01:28:55",modified="2025-04-15 17:47:24",revision=1794]]
+--[[pod_format="raw",created="2025-04-15 01:28:55",modified="2025-04-16 17:31:12",revision=2733]]
 -- enemies base
 -- cubee
 
@@ -23,7 +23,10 @@ function Enemy:create(x, y)
 		flip = false,
 		jumps = 0,
 		target = {x = 0, y = 0},
-		
+
+		hp = 10,
+		value = 10,
+
 	}, {__index = Enemy})
 
 	add(Enemy.enemies, enemy)
@@ -118,7 +121,7 @@ function Enemy.update(_ENV)
 
 	-- jumping and wall jumping
 	if target.y < y - 8 then
-		if jumps > 0 then
+		if jumps > 0 and not air then
 			yv = -jmp * 1 / (0.5 + (max_jumps + 1 - jumps) / 2)
 			jumps -= 1
 		end
@@ -199,6 +202,21 @@ function Enemy.update(_ENV)
    -- move
 	x += xv * gs
    y += yv * gs
+
+
+	-- collide with other entities
+	if aabb(_ENV, target) then
+		hp = 0
+		target:damage(1)
+	end
+
+	if hp <= 0 then
+		sfx(4)
+		for i = 0, value do
+			Pickup:create(x, y - hitbox.h)
+		end
+		add(garbage, _ENV)
+	end
 
 	t = max(t + 1)
 

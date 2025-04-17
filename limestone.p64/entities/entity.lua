@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 02:20:17",modified="2025-04-15 17:47:24",revision=1538]]
+--[[pod_format="raw",created="2025-04-15 02:20:17",modified="2025-04-16 17:31:12",revision=2459]]
 -- entity
 -- cubee
 
@@ -19,7 +19,8 @@ function Entity.create(x, y)
 		hitboxDamage = {w = 4, h = 6},
 		
 		hp = 100,
-		
+		value = 10,
+
 	}, {__index = Entity})
 
 	add(Entity.entities, en)
@@ -51,6 +52,8 @@ end
 -- base update
 function Entity.update(_ENV)
 
+	
+
 	t = max(t + 1)
 
 	-- return camera position
@@ -68,9 +71,9 @@ end
 
 -- find nearest object in pool, optional range limit
 -- returns found object or false, and shortest range
-function closest(me, pool, range)
+function Entity.closest(me, pool, range)
 	local near = false
-	local range = range or 256
+	local range = range or 4096
 	for o in all(pool) do
 		local dist = sqrt((me.x - o.x)^2 + (me.y - o.y)^2)
 		if dist < range then
@@ -91,4 +94,17 @@ function Entity.debugVisuals(_ENV)
 	if (target) line(x, y, target.x, target.y, 12)
 
 	pset(x, y, 8)
+end
+
+function Entity.aabb(a, b)
+	return not (
+		a.x + a.hitbox.w < b.x - b.hitbox.w or
+		a.x - a.hitbox.w > b.x + b.hitbox.w or
+		a.y + a.hitbox.h < b.y - b.hitbox.h or
+		a.y - a.hitbox.h > b.y + b.hitbox.h
+	)
+end
+
+function Entity.damage(t, damage)
+	t.hp -= damage
 end

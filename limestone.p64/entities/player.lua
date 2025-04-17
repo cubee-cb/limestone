@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-15 17:47:24",revision=3047]]
+--[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-16 17:31:12",revision=3959]]
 -- player
 -- cubee
 
@@ -18,7 +18,7 @@ function Player:create(x, y)
 		y = y or 16,
 		xv = 0,
 		yv = 0,
-		hitbox = {w = 6, h = 12},
+		hitbox = {w = 8, h = 16},
 		hitboxDamage = {w = 4, h = 4},
 		
 		flip = false,
@@ -270,6 +270,7 @@ function Player.update(_ENV)
 				xv, right = 0, true
 				if (air) wallslide = 1
 				x += d
+				x = x \ 1
 				break
 			end
 			d += 1
@@ -286,6 +287,7 @@ function Player.update(_ENV)
 				xv, left = 0, true
 				if (air) wallslide = -1
 				x += d
+				x = x \ 1
 				break
 			end
 			d -= 1
@@ -308,6 +310,7 @@ function Player.update(_ENV)
 				y += d
 				lastPlatformY = y \ 8
 				jumping = false
+				y = y \ 1
 				break
 			end
 			d += 1
@@ -322,6 +325,7 @@ function Player.update(_ENV)
 			if fget(cmget((x - hitbox.w + 1), iy), 0) or fget(cmget((x + hitbox.w - 1), iy), 0) then
 				yv, up = 0, true
 				y += d
+				y = y \ 1
 				break
 			end
 			d -= 1
@@ -360,7 +364,8 @@ function Player.draw(_ENV)
 	spr(gfx[64].bmp, x - 16, y - hitbox.h - 24.5 + sin(t / 150) * 2, flip)
 	
 	-- leg
-	spr(gfx[80].bmp, x - 16, y - 4.5, flip)
+	spr(gfx[82].bmp, x - 12, y - 16.5, flip)
+	spr(gfx[82].bmp, x - 20, y - 16.5, flip)
 
 	-- kim/vessel
 	spr(gfx[0].bmp, x - 8, y - hitbox.h - 12.5 + sin(t / 150) * 2, flip)

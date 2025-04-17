@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 05:50:13",modified="2025-04-15 17:47:24",revision=1076]]
+--[[pod_format="raw",created="2025-04-15 05:50:13",modified="2025-04-16 17:31:12",revision=1999]]
 -- pickup
 -- cubee
 
@@ -9,7 +9,7 @@ Pickup = setmetatable({
 }, {__index = Entity})
 
 -- create pickup
-function Pickup:create(x, y)
+function Pickup:create(x, y, v)
 	x = x or 128
 	y = y or 16
 
@@ -17,15 +17,16 @@ function Pickup:create(x, y)
 		t = 0,
 		x = x,
 		y = y,
-		xv = rnd(4) - 1,
+		xv = rnd(4) - 2,
 		yv = -1 - rnd(2),
 		hitbox = {w = 4, h = 4},
 		hitboxDamage = {w = 0, h = 0},
 
 		type = "normal",
-		value = 1,
+		value = 1 or v,
 		lifespan = 6000,
-		
+		intangible = 5, -- intangible duration so they can init before being collected
+
 		latchTime = 0,
 		lastX = y,
 		lastY = x,
@@ -34,6 +35,8 @@ function Pickup:create(x, y)
 	}, {__index = Pickup})
 
 	add(Pickup.pickups, en)
+
+	Particle:create(Particle.dust, x, y)
 
 	return en
 end
@@ -62,12 +65,14 @@ end
 
 -- base update
 function Pickup.update(_ENV)
+	local closestPlayer, distance = false, 4096
+	if intangible <= 0 then
+		closestPlayer, distance = closest(_ENV, Player.players)
+	end
 
-	local closestPlayer, distance = closest(_ENV, Player.players)
-	
 	local collectionRange = 48
 
-	if distance > collectionRange + 16 or not closestPlayer then
+	if intangible > 0 or distance > collectionRange + 16 or not closestPlayer then
 		latching = false
 	elseif distance <= collectionRange and not latching then
 		latching = true
@@ -91,8 +96,19 @@ function Pickup.update(_ENV)
 			add(garbage, _ENV)
 		end
 	else
+		xv *= 0.99
 		yv += 0.075
+		yv = min(yv, 6)
 		latchTime = 0
+
+		if fget(cmget(x - 3, y), 0) or fget(cmget(x + 3, y), 0) then
+			xv = 0
+		end
+		if yv > 0 and (fget(cmget(x, y), 0) or fget(cmget(x, y), 2)) then
+			yv = yv > 1 and (-yv * 0.3) or (0)
+			xv *= 0.5
+			y = y \ 8 * 8
+		end
 
 		x += xv
 		y += yv
@@ -101,13 +117,14 @@ function Pickup.update(_ENV)
 		lastY = y
 
 		lifespan -= #Pickup.pickups > 250 and 60 or 1
-
+		
 		if lifespan <= 0 then
 			add(garbage, _ENV)
 		end
 	end
 
 	t = max(t + 1)
+	intangible = max(intangible - 1)
 
 	-- return camera position
 	return x, y - hitbox.h

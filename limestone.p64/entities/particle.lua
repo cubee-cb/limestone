@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 13:09:27",modified="2025-04-15 17:47:24",revision=861]]
+--[[pod_format="raw",created="2025-04-15 13:09:27",modified="2025-04-16 17:31:12",revision=1761]]
 -- pickup
 -- cubee
 
@@ -23,7 +23,7 @@ Particle = setmetatable({
 	end,
 	smoke = function(_ENV, init)
 		if init then
-			lifespan = 120 + rnd(40)
+			lifespan = 80 + rnd(60)
 			s = 0.8 + rnd(0.4)
 			return
 		end

@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 02:01:34",modified="2025-04-15 17:47:24",revision=1600]]
+--[[pod_format="raw",created="2025-04-15 02:01:34",modified="2025-04-16 17:31:12",revision=2505]]
 -- exit
 -- cubee
 
@@ -17,8 +17,8 @@ function Exit:create(x, y)
 		y = y or 16,
 		xv = 0,
 		yv = 0,
-		hitbox = {w = 6, h = 10},
-		hitboxDamage = {w = 5, h = 13},
+		hitbox = {w = 10, h = 32},
+		hitboxDamage = {w = 10, h = 30},
 		
 		hp = 100,
 		
