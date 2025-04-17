@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-16 17:31:12",revision=3959]]
+--[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-17 02:16:50",revision=4116]]
 -- player
 -- cubee
 
@@ -25,6 +25,7 @@ function Player:create(x, y)
 		ground_last_y = 16,
 		fall_distance = 0,
 		wallslide = 0,
+		canWallJump = false,
 		jumps = 0,
 		maxJumps = 2,
 		
@@ -163,10 +164,11 @@ function Player.update(_ENV)
 
 
 	if (gravity) yv += grv * (btn(3) and 3 or 1) * gs
+	if (canWallJump and wallslide ~= 0) yv = min(yv, 0.5)
 
 	-- jumping and wall jumping
 	if btnp(4) then
-		if wallslide ~= 0 then
+		if canWallJump and wallslide ~= 0 then
 			for i = 1, 5 do
 				Particle:create(Particle.dust, x + hitbox.w * wallslide, y - 2, rnd(1) * -wallslide, rnd() + 0.5)
 			end
@@ -347,6 +349,14 @@ function Player.update(_ENV)
 		ground_last_y = y
 	end
 
+	-- attack enemies
+	if (btnp(5)) then
+		for e in all(Enemy.enemies) do
+			if aabb(_ENV, e) then
+				e:damage(1)
+			end
+		end
+	end
 
 	t = max(t + 1)
 

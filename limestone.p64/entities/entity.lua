@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 02:20:17",modified="2025-04-16 17:31:12",revision=2459]]
+--[[pod_format="raw",created="2025-04-15 02:20:17",modified="2025-04-17 02:16:50",revision=2610]]
 -- entity
 -- cubee
 
@@ -97,7 +97,7 @@ function Entity.debugVisuals(_ENV)
 end
 
 function Entity.aabb(a, b)
-	return not (
+	return a.hitbox and b.hitbox and not (
 		a.x + a.hitbox.w < b.x - b.hitbox.w or
 		a.x - a.hitbox.w > b.x + b.hitbox.w or
 		a.y + a.hitbox.h < b.y - b.hitbox.h or

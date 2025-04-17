@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 05:09:42",modified="2025-04-16 17:31:12",revision=2071]]
+--[[pod_format="raw",created="2025-04-15 05:09:42",modified="2025-04-17 02:16:50",revision=2217]]
 -- ability
 -- cubee
 
@@ -25,7 +25,9 @@ Ability = {
 	wallJump = {
 		name = "Magnet Fingers",
 		desc = "Grants the ability to slide and jump on walls",
-		-- todo: lock walljump behind this
+		equip = function(_ENV)
+			canWallJump = true
+		end
 	},
 
 	monkeyBars = {

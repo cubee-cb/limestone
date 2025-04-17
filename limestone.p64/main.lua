@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2024-03-18 18:22:30",modified="2025-04-16 17:31:12",revision=3876]]
+--[[pod_format="raw",created="2024-03-18 18:22:30",modified="2025-04-17 02:16:50",revision=4023]]
 -- limestone (internal)
 -- by cubee
 
@@ -105,7 +105,7 @@ function _update()
 
 		-- there are no more rounds
 		elseif roundTime == -1 then
-			stop()
+			gameMode = GameMode.finish
 		end
 	end
 
@@ -174,6 +174,6 @@ function _draw()
 
 	if intermission > 0 then
 		print("Intermission: " .. (intermission \ 60), 64, 64, 7)
-		print("" .. rounds[Round.index].tip)
+		print("" .. (rounds[Round.index].tip or ""))
 	end
 end
