@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 02:01:34",modified="2025-04-17 02:04:13",revision=2598]]
+--[[pod_format="raw",created="2025-04-15 02:01:34",modified="2025-04-17 03:00:35",revision=2627]]
 -- exit
 -- cubee
 
@@ -6,6 +6,7 @@ include("entities/entity.lua")
 
 Exit = setmetatable({
 	exits = {},
+	garbage = {},
 	gfx = fetch("gfx/exit.gfx")
 }, {__index = Entity})
 
@@ -29,18 +30,19 @@ function Exit:create(x, y)
 	return ex
 end
 
--- update all exits and average camera position
+-- update all exits and return amount of exits
 function Exit.updateAll()
-	local cx, cy = 0, 0
-	for e in all(Exit.exits) do
-		local cx2, cy2 = e:update()
-		cx += cx2
-		cy += cy2
-	end
-	cx /= #Exit.exits
-	cy /= #Exit.exits
+	Exit.garbage = {}
 
-	return cx, cy
+	for e in all(Exit.exits) do
+		e:update()
+	end
+
+	for e in all(Exit.garbage) do
+		del(Exit.exits, e)
+	end
+
+	return #Exit.exits
 end
 
 -- draw all exits
@@ -57,6 +59,11 @@ function Exit.update(_ENV)
 		y += 1
 	end
 
+	if hp <= 0 then
+		hp = 0
+		add(garbage, _ENV)
+	end
+
 	t = max(t + 1)
 
 	-- return camera position
@@ -70,5 +77,5 @@ function Exit.draw(_ENV)
 
 	debugVisuals(_ENV)
 
-	print("hp: " .. hp, x + 16, y, 9)
+	print("hp: " .. hp, x - 16, y - hitbox.h * 2 - 32, 9)
 end

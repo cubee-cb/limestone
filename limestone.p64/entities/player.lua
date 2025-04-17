@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-17 02:36:37",revision=4218]]
+--[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-17 03:00:35",revision=4285]]
 -- player
 -- cubee
 
@@ -164,7 +164,7 @@ function Player.update(_ENV)
 
 
 	if (gravity) yv += grv * (btn(3) and 3 or 1) * gs
-	if (canWallJump and wallslide ~= 0) yv = min(yv, 0.5)
+	if (canWallJump and wallslide ~= 0) yv = min(yv, btn(3) and 1.5 or 0.5)
 
 	-- jumping and wall jumping
 	if btnp(4) then

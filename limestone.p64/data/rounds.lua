@@ -1,10 +1,10 @@
---[[pod_format="raw",created="2025-04-16 00:37:01",modified="2025-04-17 02:36:37",revision=1263]]
+--[[pod_format="raw",created="2025-04-16 00:37:01",modified="2025-04-17 03:00:35",revision=1333]]
 -- round information
 -- cubee
 
 Round = {
 	tick = 0,
-	index = 5,
+	index = 1,
 	handlers = {},
 	garbage = {},
 	minDuration = 100,
@@ -117,8 +117,15 @@ rounds = {
 			spacing = 40, -- interval between spawns
 			entrances = {3, 4}, -- entrances to spawn at
 		},
+		{
+			tick = 200, -- tick to create this spawner at
+			type = Pop, -- enemy class to spawn
+			amount = 100, -- amount to spawn
+			spacing = 1, -- interval between spawns
+			entrances = {1, 2, 3, 4}, -- entrances to spawn at
+		},
 	},
-	
+
 	[1.1] = { -- round number
 		tip = "Enemies start from the first entrance.",
 		{

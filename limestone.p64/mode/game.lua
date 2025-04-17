@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 02:21:14",modified="2025-04-17 02:36:38",revision=83]]
+--[[pod_format="raw",created="2025-04-17 02:21:14",modified="2025-04-17 03:00:35",revision=160]]
 -- game screen
 -- cubee
 
@@ -14,6 +14,8 @@ GameMode.game = {
 
 		levelCollision = false
 		levelVisual = false
+		levelFore = false
+		levelBack = false
 
 		levelMap = fetch("map/0.map")
 		for i in all(levelMap) do
@@ -21,6 +23,10 @@ GameMode.game = {
 				levelCollision = i
 			elseif i.name == "visual" then
 				levelVisual = i
+			elseif i.name == "foreground" then
+				levelFore = i
+			elseif i.name == "background" then
+				levelBack = i
 			end
 		end
 
@@ -122,22 +128,27 @@ GameMode.game = {
 			map(levelMap[i].bmp)
 		end
 		--]]
-		-- background particles
+
+		-- background
+		map(levelBack.bmp)
+		Entrance.drawAll()
+		Exit.drawAll()
+
 		Particle.drawAll(false)
 
+		-- middleground
 		-- map layers
 		map(levelVisual.bmp)
 		if(debug and debug.collision)map(levelCollision.bmp)
 
 		-- entities
-		Entrance.drawAll()
-		Exit.drawAll()
 		Enemy.drawAll()
 		Pickup.drawAll()
 		Player.drawAll()
 
-		-- foreground particles
+		-- foreground
 		Particle.drawAll(true)
+		map(levelFore.bmp)
 
 		camera(0, 0)
 		cursor(32, 16)
