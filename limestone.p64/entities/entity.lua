@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 02:20:17",modified="2025-04-17 03:00:35",revision=2779]]
+--[[pod_format="raw",created="2025-04-15 02:20:17",modified="2025-04-17 17:37:05",revision=3644]]
 -- entity
 -- cubee
 
@@ -17,6 +17,7 @@ function Entity.create(x, y)
 		yv = 0,
 		hitbox = {w = 6, h = 10},
 		hitboxDamage = {w = 4, h = 6},
+		standOnPlatforms = false,
 		
 		hp = 100,
 		value = 10,
@@ -86,10 +87,10 @@ end
 
 -- general debug visuals: hitboxes, origins, aim, etc
 function Entity.debugVisuals(_ENV)
-	if (not debug) return
+	if (not db) return
 
-	if (debug.collision) rect(x - hitbox.w, y - hitbox.h * 2 + 1, x + hitbox.w - 1, y, 7)
-	if (debug.entityCollision) rect(x - hitboxDamage.w, y - hitboxDamage.h * 2 + 1, x + hitboxDamage.w - 1, y, 8)
+	if (db.collision) rect(x - hitbox.w, y - hitbox.h * 2 + 1, x + hitbox.w - 1, y, 7)
+	if (db.entityCollision) rect(x - hitboxDamage.w, y - hitboxDamage.h * 2 + 1, x + hitboxDamage.w - 1, y, 8)
 
 	if (target) line(x, y, target.x, target.y, 12)
 
@@ -107,4 +108,74 @@ end
 
 function Entity.damage(t, damage)
 	t.hp -= damage
+	sfx(8)
+end
+
+function Entity.collideTiles(_ENV)
+	air, left, right, up, left_g, right_g = true
+	local cy = max(0, y)
+
+	-- right
+	local d = 0
+	if xv > 0 then
+		repeat
+			local ix, iy = (x + hitbox.w + d), (cy - 1)
+			if fget(cmget(ix, (cy - hitbox.h * 2 + 1)), 0) or fget(cmget(ix, iy), 0) then
+				xv, right = 0, true
+				x += d
+				x = x \ 1
+				break
+			end
+			d += 1
+		until d > xv
+	end
+	
+	-- left
+	d = 0
+	if xv < 0 then
+		repeat
+			local ix, iy = (x - hitbox.w + d), (cy - 1)
+			if fget(cmget(ix, (cy - hitbox.h * 2 + 1)), 0) or fget(cmget(ix, iy), 0) then
+				xv, left = 0, true
+				x += d
+				x = x \ 1
+				break
+			end
+			d -= 1
+		until d < xv
+	end
+	
+	-- down
+	d = 0
+	if yv > 0 then
+		repeat
+			local iy = (cy + d)
+			local il, ir = cmget((x - hitbox.w + 1), iy), cmget((x + hitbox.w - 1), iy)
+			left_g = fget(il, 0) or fget(il, 2) and standOnPlatforms
+			right_g = fget(ir, 0) or fget(ir, 2) and standOnPlatforms
+			if left_g or right_g then
+				yv, air = 0
+				jumps = max_jumps
+				y += d
+				y = y \ 1
+				break
+			end
+			d += 1
+		until d > yv
+	end
+
+	-- up
+	d = 0
+	if yv < 0 then
+		repeat
+			local iy = (cy - hitbox.h * 2 + d)
+			if fget(cmget((x - hitbox.w + 1), iy), 0) or fget(cmget((x + hitbox.w - 1), iy), 0) then
+				yv, up = 0, true
+				y += d
+				y = y \ 1
+				break
+			end
+			d -= 1
+		until d < yv
+	end
 end

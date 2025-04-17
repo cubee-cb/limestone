@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-17 03:00:35",revision=4285]]
+--[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-17 17:37:05",revision=5169]]
 -- player
 -- cubee
 
@@ -49,11 +49,11 @@ function Player:create(x, y)
 		},
 
 		equipment = {
-			mouth = false,
-			arms = false,
-			feet = false,
-			aura = false,
-			roll = false,
+			mouth = nil,
+			arms = nil,
+			feet = nil,
+			aura = nil,
+			roll = nil,
 		},
 		
 	}, {__index = Player})
@@ -158,7 +158,7 @@ function Player.update(_ENV)
 	end
 
 	-- idle smoke
-	if abs(xv) > 0.5 and t % 20 == 0 or t % 3 == 0 then
+	if abs(xv) > 0.5 and t % 30 == 0 or t % 8 == 0 then
 		Particle:create(Particle.smoke, x + xv + rnd(8) - 4, y - hitbox.h - rnd(16), xv / 2 + rnd() - 0.5, 0)
 	end
 
@@ -216,7 +216,7 @@ function Player.update(_ENV)
 
 
 
-   ---[[ slopes
+   --[[ slopes
    local ty = (y + 3) \ 1
    local yo, stile = 0, cmget(x, ty)
    local xo = flr(x) % 8
@@ -268,7 +268,7 @@ function Player.update(_ENV)
 		wallslide = 0
 		repeat
 			local ix, iy = (x + hitbox.w + d), (cy - 1)
-			if fget(cmget(ix, (cy - hitbox.h * 2 + 1)), 0) or (fget(cmget(ix, iy), 0) and slopeType < 1) then
+			if pfget(cmget(ix, (cy - hitbox.h * 2 + 1)), 0) or (pfget(cmget(ix, iy), 0) and slopeType < 1) then
 				xv, right = 0, true
 				if (air) wallslide = 1
 				x += d
@@ -285,7 +285,7 @@ function Player.update(_ENV)
 		wallslide = 0
 		repeat
 			local ix, iy = (x - hitbox.w + d), (cy - 1)
-			if fget(cmget(ix, (cy - hitbox.h * 2 + 1)), 0) or (fget(cmget(ix, iy), 0) and slopeType > -1) then
+			if pfget(cmget(ix, (cy - hitbox.h * 2 + 1)), 0) or (pfget(cmget(ix, iy), 0) and slopeType > -1) then
 				xv, left = 0, true
 				if (air) wallslide = -1
 				x += d
@@ -302,8 +302,8 @@ function Player.update(_ENV)
 		repeat
 			local iy = (cy + d + slopeOffset)
 			local il, ir = cmget((x - hitbox.w + 1), iy), cmget((x + hitbox.w - 1), iy)
-			left_g = fget(il, 0) or fget(il, 2) and iy % 8 < 1 and standOnPlatforms
-			right_g = fget(ir, 0) or fget(ir, 2) and iy % 8 < 1 and standOnPlatforms
+			left_g = pfget(il, 0) or pfget(il, 2) and iy % 8 < 1 and standOnPlatforms
+			right_g = pfget(ir, 0) or pfget(ir, 2) and iy % 8 < 1 and standOnPlatforms
 			if left_g or right_g then
 				yv, air = 0
 				fall_distance = 0
@@ -324,7 +324,7 @@ function Player.update(_ENV)
 	if yv < 0 then
 		repeat
 			local iy = (cy - hitbox.h * 2 + d)
-			if fget(cmget((x - hitbox.w + 1), iy), 0) or fget(cmget((x + hitbox.w - 1), iy), 0) then
+			if pfget(cmget((x - hitbox.w + 1), iy), 0) or pfget(cmget((x + hitbox.w - 1), iy), 0) then
 				yv, up = 0, true
 				y += d
 				y = y \ 1
@@ -358,6 +358,18 @@ function Player.update(_ENV)
 		end
 	end
 
+	-- buy item
+	local closestStoreItem = Entity.closest(_ENV, StoreItem.items)
+	if closestStoreItem and closestStoreItem.collectable and btnp(5) then
+		local item = StoreItem.purchase(_ENV, closestStoreItem)
+		if (item) item.init(_ENV, closestStoreItem)
+	end
+
+	-- run item updates
+	for slot, content in pairs(equipment) do
+		content:update(_ENV)
+	end
+
 	t = max(t + 1)
 
 	-- return camera position
@@ -368,27 +380,33 @@ end
 function Player.draw(_ENV)
 
 	-- rear arm
-	spr(gfx[73].bmp, x - 16, y - hitbox.h - 24.5 + sin((t - 20) / 150) * 2, flip)
+	spr(gfx[73].bmp, x - 16, y - hitbox.h*2 - 8.5 + sin((t - 20) / 150) * 2, flip)
 
 	-- main body
-	spr(gfx[64].bmp, x - 16, y - hitbox.h - 24.5 + sin(t / 150) * 2, flip)
+	spr(gfx[64].bmp, x - 16, y - hitbox.h*2 - 8.5 + sin(t / 150) * 2, flip)
 	
 	-- leg
-	spr(gfx[82].bmp, x - 12, y - 16.5, flip)
-	spr(gfx[82].bmp, x - 20, y - 16.5, flip)
+	spr(gfx[82].bmp, x - 12, y - hitbox.h*2 + 16.5, flip)
+	spr(gfx[82].bmp, x - 20, y - hitbox.h*2 + 16.5, flip)
 
 	-- kim/vessel
-	spr(gfx[0].bmp, x - 8, y - hitbox.h - 12.5 + sin(t / 150) * 2, flip)
+	spr(gfx[0].bmp, x - 8, y - hitbox.h*2 + 4.5 + sin(t / 150) * 2, flip)
 	--spr(gfx[1].bmp, x - 8, y - hitbox.h - 8)
 
 	-- front arm
-	spr(gfx[72].bmp, x - 16, y - hitbox.h - 24.5 + sin((t - 20) / 150) * 2, flip)
+	spr(gfx[72].bmp, x - 16, y - hitbox.h*2 - 8.5 + sin((t - 20) / 150) * 2, flip)
+
+	-- run item draws
+	for slot, content in pairs(equipment) do
+		content:draw(_ENV)
+	end
 
 	debugVisuals(_ENV)
 
-	print(cmget((x)/8,(y+4)/8), x + 16, y, 9)
-	print(x\8 .." " .. (y+4)\8, x + 16, y+8, 9)
-	print(slopeOffset)
+	cursor(x + 16, y - hitbox.h * 2 - 16)
+	--print(cmget((x)/8,(y+4)/8), x + 16, y, 9)
+	--print(x\8 .." " .. (y+4)\8, x + 16, y+8, 9)
+	--print(slopeOffset)
 	print(jumps.."/"..maxJumps)
 	print("P:"..points.normal)
 end

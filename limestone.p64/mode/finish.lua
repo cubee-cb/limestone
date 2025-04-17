@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 02:27:51",modified="2025-04-17 03:00:35",revision=102]]
+--[[pod_format="raw",created="2025-04-17 02:27:51",modified="2025-04-17 17:37:05",revision=961]]
 -- finish screen
 -- cubee
 
@@ -19,5 +19,6 @@ GameMode.finish = {
 		print("a winner is you!", 64, 64, gt % 30 < 15 and 7 or 10)
 		print("you grew to be the best")
 		print("and survived all rounds")
+		print("Press btn 4 (Z) to return to title", 64, 200, 7)
 	end,
 }

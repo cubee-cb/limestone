@@ -1,0 +1,74 @@
+Ryan Malm
+https://discord.com/channels/1068899948592107540/1068899949670056038/1362266178503835813
+
+basic inheritance, base class:
+```
+-- actor.lua
+-- Base “class”
+Actor = {}
+Actor.__index = Actor
+
+-- Constructor for Actor
+function Actor:new(o)
+  o = o or {}
+  -- default properties
+  o.x      = o.x      or 0
+  o.y      = o.y      or 0
+  o.health = o.health or 100
+  setmetatable(o, self)
+  return o
+end
+
+function Actor:move(dx, dy)
+  self.x = self.x + dx
+  self.y = self.y + dy
+end
+
+function Actor:take_damage(amount)
+  self.health = self.health - amount
+end```
+
+and then player :
+
+```
+-- player.lua
+-- Another subclass of Actor
+Player = setmetatable({}, { __index = Actor })
+Player.__index = Player
+
+function Player:new(o)
+  o = o or {}
+  -- override the default health for players
+  o.health = o.health or 200
+  -- call Actor constructor
+  local inst = Actor.new(self, o)
+  -- Player‑specific defaults
+  inst.lives = inst.lives or 3
+  return inst
+end
+
+function Player:jump()
+  -- … player jump logic …
+  print("Player jumps!")
+end
+```
+and an npc:
+```
+-- npc.lua
+-- Subclass of Actor
+NPC = setmetatable({}, { __index = Actor })
+NPC.__index = NPC
+
+function NPC:new(o)
+  o = o or {}
+  -- call Actor constructor to set up base properties
+  local inst = Actor.new(self, o)
+  -- NPC‑specific defaults
+  inst.dialogue = inst.dialogue or { "..." }
+  return inst
+end
+
+function NPC:speak()
+  print(self.dialogue[1])
+end
+```

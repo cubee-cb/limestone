@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 05:50:13",modified="2025-04-17 03:00:35",revision=2315]]
+--[[pod_format="raw",created="2025-04-15 05:50:13",modified="2025-04-17 17:37:05",revision=3182]]
 -- pickup
 -- cubee
 
@@ -19,6 +19,8 @@ function Pickup:create(x, y, v)
 		y = y,
 		xv = rnd(4) - 2,
 		yv = -1 - rnd(2),
+		a = rnd(),
+		av = (rnd(2) - 1) / 10,
 		hitbox = {w = 4, h = 4},
 		hitboxDamage = {w = 0, h = 0},
 
@@ -87,7 +89,7 @@ function Pickup.update(_ENV)
 		latchTime = mid(0, latchTime, 1)
 
 		x = lastX + (closestPlayer.x - lastX) * easeBack(latchTime)
-		y = lastY + (closestPlayer.y - lastY) * easeBack(latchTime)
+		y = lastY + (closestPlayer.y - closestPlayer.hitbox.h - lastY) * easeBack(latchTime)
 
 		-- collect pickup
 		if latchTime == 1 then
@@ -107,11 +109,14 @@ function Pickup.update(_ENV)
 		if yv > 0 and (fget(cmget(x, y), 0) or fget(cmget(x, y), 2)) then
 			yv = yv > 1 and (-yv * 0.3) or (0)
 			xv *= 0.5
+			av *= 0.8
+			xv += av * 10
 			y = y \ 8 * 8
 		end
 
 		x += xv
 		y += yv
+		a += av
 			
 		lastX = x
 		lastY = y
@@ -132,7 +137,7 @@ end
 
 -- base draw
 function Pickup.draw(_ENV)
-	spr(gfx[0].bmp, x - 4, y - 8)
+	spr(gfx[0 + (a % 1 * 8)\1].bmp, x - 4, y - 8)
 	--debugVisuals(_ENV)
 	--?lifespan,x,y
 end

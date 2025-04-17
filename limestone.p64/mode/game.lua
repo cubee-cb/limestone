@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 02:21:14",modified="2025-04-17 03:00:35",revision=160]]
+--[[pod_format="raw",created="2025-04-17 02:21:14",modified="2025-04-17 17:37:05",revision=1056]]
 -- game screen
 -- cubee
 
@@ -10,6 +10,7 @@ GameMode.game = {
 		Entrance.entrances = {}
 		Pickup.pickups = {}
 		Particle.particles = {}
+		StoreItem.items = {}
 
 
 		levelCollision = false
@@ -43,18 +44,22 @@ GameMode.game = {
 		Entrance:create(8*128 - 768 - 192, 15 * 8)
 		Entrance:create(8*128 + 768, 36 * 8)
 		Entrance:create(8*128 - 768, 36 * 8)
-	--[[
+		--[[
 		for i = 0, 100 do
 			Pickup:create(8 * 128 + i * 8, 100)
 		end--]]
+
+		--StoreItem:create(Item.wings, 128 * 8, 360)
+		--StoreItem:create(Item.testificate, 128 * 8, 120)
+		--StoreItem.spawnThem(128 * 8, 360)
 
 		cam_x = 0
 		cam_y = 0
 		cam_xt = 0
 		cam_yt = 0
 
-		intermissionTimer = 60 * 5 -- 3600 * 0.5 --(minutes)
-		intermission = intermissionTimer
+		intermissionTimer = 3600 * 0.5 --(minutes)
+		intermission = 60 * 5 -- intermissionTimer
 
 		-- vertical offset from top, see:
 		-- http://higherorderfun.com/blog/2012/05/20/the-guide-to-implementing-2d-platformers/
@@ -83,6 +88,7 @@ GameMode.game = {
 					stop()
 				else
 					Round.beginNext()
+					StoreItem.expireAll()
 					intermission = 0
 				end
 			end
@@ -96,6 +102,9 @@ GameMode.game = {
 				intermission = intermissionTimer
 				Round.index += 1
 
+				-- create store items
+				StoreItem.spawnThem(128 * 8, 360)
+
 			-- there are no more rounds
 			elseif roundTime == -1 then
 				GameMode.go(GameMode.finish)
@@ -107,6 +116,7 @@ GameMode.game = {
 
 		Pickup.updateAll()
 		Particle.updateAll()
+		StoreItem.updateAll()
 
 		Entrance.updateAll()
 		local aliveExits = Exit.updateAll()
@@ -139,11 +149,12 @@ GameMode.game = {
 		-- middleground
 		-- map layers
 		map(levelVisual.bmp)
-		if(debug and debug.collision)map(levelCollision.bmp)
+		if(db and db.collision)map(levelCollision.bmp)
 
 		-- entities
 		Enemy.drawAll()
 		Pickup.drawAll()
+		StoreItem.drawAll()
 		Player.drawAll()
 
 		-- foreground
@@ -161,6 +172,7 @@ GameMode.game = {
 		--]]
 		--print(cmget(2, 33), 32, 16, 12)
 		print("Round: " .. Round.index .. " (" .. Round.tick .. "/" .. Round.minDuration .. ")")
+		print("Points: " .. player.points["normal"])
 	--[[
 		print(pod(rounds[Round.index]))
 		for k,i in ipairs(rounds[Round.index]) do

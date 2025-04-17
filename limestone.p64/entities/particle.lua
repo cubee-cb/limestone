@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 13:09:27",modified="2025-04-17 03:00:35",revision=2074]]
+--[[pod_format="raw",created="2025-04-15 13:09:27",modified="2025-04-17 17:37:05",revision=2952]]
 -- pickup
 -- cubee
 
@@ -24,6 +24,8 @@ Particle = setmetatable({
 	smoke = function(_ENV, init)
 		if init then
 			lifespan = 80 + rnd(60)
+			--a = rnd()
+			--av = (rnd(2)-1) / 500
 			s = 0.8 + rnd(0.4)
 			return
 		end
@@ -32,9 +34,10 @@ Particle = setmetatable({
 		xv *= 0.97
 		x += xv
 		y += yv
+		a += av
 
 		sprite = 6 - (lifespan / lifespanMax * 3.9) \ 1
-		s=1
+		s = 0.5 + (lifespan / lifespanMax)
 	end,
 }, {__index = Entity})
 
@@ -49,6 +52,8 @@ function Particle:create(u, x, y, xv, yv)
 		y = y,
 		xv = xv or rnd(4) - 1,
 		yv = yv or rnd(4) - 1,
+		a = 0,
+		av = 0,
 		hitbox = {w = 4, h = 4},
 		hitboxDamage = {w = 0, h = 0},
 
@@ -113,7 +118,12 @@ function Particle.draw(_ENV, foreground)
 	if (fg != foreground) return
 
 	local bmp = gfx[sprite \ 1] and gfx[sprite \ 1].bmp or gfx[0].bmp
+	s = s or 1
 	local w, h = bmp:width() * s, bmp:height() * s
-	sspr(bmp, 0, 0, bmp:width(), bmp:height(), x - w / 2, y - h / 2, w, h)
+	if a == 0 then
+		sspr(bmp, 0, 0, bmp:width(), bmp:height(), x - w / 2, y - h / 2, w, h)
+	else
+		rspr(bmp, x, y, s, s, a)
+	end
 	--?lifespan,x,y,7
 end

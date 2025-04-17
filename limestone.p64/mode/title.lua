@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 02:19:17",modified="2025-04-17 03:00:35",revision=162]]
+--[[pod_format="raw",created="2025-04-17 02:19:17",modified="2025-04-17 17:37:05",revision=1026]]
 -- title screen
 -- cubee
 
@@ -16,5 +16,7 @@ GameMode.title = {
 
 	draw = function()
 		cls(2)
+		print("that old limestone mine down the road", 64, 64, 7)
+		print("Press btn 4 (Z) to start", 64, 200, 7)
 	end,
 }

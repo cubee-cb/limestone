@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 01:28:55",modified="2025-04-17 03:00:35",revision=3067]]
+--[[pod_format="raw",created="2025-04-15 01:28:55",modified="2025-04-17 17:37:05",revision=3923]]
 -- enemies base
 -- cubee
 
@@ -23,6 +23,7 @@ function Enemy:create(data, x, y)
 		yv = 0,
 		hitbox = {w = 6, h = 10},
 		hitboxDamage = {w = 10, h = 12},
+		standOnPlatforms = false,
 		flip = false,
 		jumps = 0,
 		target = {x = 0, y = 0},
@@ -89,7 +90,7 @@ function Enemy.update(_ENV)
 
 	-- die
 	if hp <= 0 then
-		sfx(4)
+		sfx(7)
 		for i = 0, value do
 			Pickup:create(x, y - hitbox.h)
 		end
