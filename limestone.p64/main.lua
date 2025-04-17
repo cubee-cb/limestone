@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2024-03-18 18:22:30",modified="2025-04-17 02:35:24",revision=4131]]
+--[[pod_format="raw",created="2024-03-18 18:22:30",modified="2025-04-17 02:36:37",revision=4135]]
 -- limestone (internal)
 -- by cubee
 
@@ -23,6 +23,7 @@ include("mode/gamemode.lua")
 include("mode/title.lua")
 include("mode/game.lua")
 include("mode/finish.lua")
+include("mode/dead.lua")
 
 function _init()
 	poke(0x5f5c, 255)
