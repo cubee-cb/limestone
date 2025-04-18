@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2024-03-18 18:22:30",modified="2025-04-17 17:37:05",revision=5091]]
+--[[pod_format="raw",created="2024-03-18 18:22:30",modified="2025-04-18 16:22:43",revision=6409]]
 -- limestone (internal)
 -- by cubee
 
@@ -22,6 +22,7 @@ include("entities/entrance.lua")
 include("entities/pickup.lua")
 include("entities/particle.lua")
 include("entities/storeItem.lua")
+include("entities/projectile.lua")
 
 include("helpers/motion.lua")
 include("helpers/map.lua")
@@ -37,6 +38,7 @@ include("mode/dead.lua")
 
 function _init()
 	poke(0x5f5c, 255)
+	poke(0x550b,0x3f)
 	
 	gt = 0
 	GameMode.go(GameMode.title)

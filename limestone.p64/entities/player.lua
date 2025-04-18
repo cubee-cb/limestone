@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-17 17:37:05",revision=5169]]
+--[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-18 16:22:43",revision=6498]]
 -- player
 -- cubee
 
@@ -20,6 +20,7 @@ function Player:create(x, y)
 		yv = 0,
 		hitbox = {w = 8, h = 16},
 		hitboxDamage = {w = 4, h = 4},
+		bonusPickupRange = 0,
 		
 		flip = false,
 		ground_last_y = 16,
@@ -37,15 +38,15 @@ function Player:create(x, y)
 		points = {
 			normal = 0,
 		},
-		
+
 		abilities = {
-			Ability.dash,
+			--Ability.dash,
 			--Ability.wings,
 			Ability.wallJump,
-			Ability.monkeyBars,
-			Ability.dive,
-			Ability.push,
-			Ability.homingAttack,
+			--Ability.monkeyBars,
+			--Ability.dive,
+			--Ability.push,
+			--Ability.homingAttack,
 		},
 
 		equipment = {
@@ -176,7 +177,7 @@ function Player.update(_ENV)
 			yv = -jmp * 0.75
 			wallslide = 0
 			jumping = true
-		elseif jumps > 0 then
+		elseif jumps > 0 and not btn(3) then
 			for i = 1, 5 do
 				Particle:create(Particle.dust, x + hitbox.w * wallslide, y - 2, rnd(2) - 1, (rnd(2) - 1) / 5)
 			end
@@ -349,25 +350,44 @@ function Player.update(_ENV)
 		ground_last_y = y
 	end
 
-	-- attack enemies
 	if (btnp(5)) then
-		for e in all(Enemy.enemies) do
-			if aabb(_ENV, e) then
-				e:damage(1)
+		-- end intermission
+		if Round.intermission > 0 then
+			local exit, distance = Entity.closest(_ENV, Exit.exits)
+			if distance < 64 then
+				sfx(10)
+				Round.intermission = min(Round.intermission, 5)
+			end
+
+		-- attack enemies
+		else
+			for e in all(Enemy.enemies) do
+				if aabb(_ENV, e) then
+					e:damage(1)
+					if e.hp <= 0 then
+						-- run item kill events
+						for slot, content in pairs(equipment) do
+							if (content.onKill) content:onKill(e)
+						end
+					end
+				end
 			end
 		end
+
 	end
 
 	-- buy item
-	local closestStoreItem = Entity.closest(_ENV, StoreItem.items)
-	if closestStoreItem and closestStoreItem.collectable and btnp(5) then
-		local item = StoreItem.purchase(_ENV, closestStoreItem)
-		if (item) item.init(_ENV, closestStoreItem)
+	if Round.intermission > 0 then
+		local closestStoreItem = Entity.closest(_ENV, StoreItem.items)
+		if closestStoreItem and closestStoreItem.collectable and btnp(5) then
+			local item = StoreItem.purchase(_ENV, closestStoreItem)
+			if (item and item.init) item:init(_ENV, closestStoreItem)
+		end
 	end
 
 	-- run item updates
 	for slot, content in pairs(equipment) do
-		content:update(_ENV)
+		if (content.update) content:update(_ENV)
 	end
 
 	t = max(t + 1)
@@ -398,15 +418,15 @@ function Player.draw(_ENV)
 
 	-- run item draws
 	for slot, content in pairs(equipment) do
-		content:draw(_ENV)
+		if (content.draw) content:draw(_ENV)
 	end
 
 	debugVisuals(_ENV)
-
+--[[
 	cursor(x + 16, y - hitbox.h * 2 - 16)
 	--print(cmget((x)/8,(y+4)/8), x + 16, y, 9)
 	--print(x\8 .." " .. (y+4)\8, x + 16, y+8, 9)
 	--print(slopeOffset)
 	print(jumps.."/"..maxJumps)
-	print("P:"..points.normal)
+	print("P:"..points.normal)]]
 end

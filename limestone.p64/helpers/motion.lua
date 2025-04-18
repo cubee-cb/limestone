@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-13 15:59:04",modified="2025-04-17 17:37:05",revision=4734]]
+--[[pod_format="raw",created="2025-04-13 15:59:04",modified="2025-04-18 16:22:43",revision=6061]]
 -- motion helpers
 -- cubee
 -- ref:
@@ -7,6 +7,23 @@
 function elasticFollow(_env, xt, yt)
 	x += (xt - x) / 10
 	y += (yt - y) / 10
+end
+
+function angleToVelocity(a)
+	return sin(a), cos(a)
+end
+
+function deltaToAngle(xv, yv)
+	return -0.25-atan2(xv, yv)
+end
+
+function posToAngle(x1, y1, x2, y2)
+	return -0.25-atan2(x2 - x1, y2 - y1)
+end
+
+function normalise(xv, yv, v)
+	local a = -0.25-atan2(xv, yv)
+	return sin(a) * (v or 1), cos(a) * (v or 1)
 end
 
 function lerpExpo(t)

@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 02:20:17",modified="2025-04-17 17:37:05",revision=3644]]
+--[[pod_format="raw",created="2025-04-15 02:20:17",modified="2025-04-18 16:22:43",revision=4956]]
 -- entity
 -- cubee
 
@@ -66,8 +66,6 @@ function Entity.draw(_ENV)
 	spr(gfx[0].bmp, x - 16, y - 32)
 
 	debugVisuals(_ENV)
-
-	print("hp: " .. hp, x + 16, y, 9)
 end
 
 -- find nearest object in pool, optional range limit

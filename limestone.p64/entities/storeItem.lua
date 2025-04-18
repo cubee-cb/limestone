@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 11:45:14",modified="2025-04-17 17:37:05",revision=738]]
+--[[pod_format="raw",created="2025-04-17 11:45:14",modified="2025-04-18 16:22:43",revision=2110]]
 -- store item
 -- cubee
 
@@ -14,7 +14,7 @@ function StoreItem:create(itemData, x, y)
 	y = y or 16
 
 	local en = setmetatable({
-		t = 0,
+		t = rnd(200),
 		x = x,
 		y = y,
 		xv = 0,
@@ -85,7 +85,7 @@ function StoreItem.update(_ENV)
 	if yv > 0 and (fget(cmget(x, y), 0) or fget(cmget(x, y), 2)) then
 		if yv > 1.5 then
 			yv = -yv * 0.3
-			sfx(7)
+			sfx(8)
 		else
 			yv = 0
 		end
@@ -103,10 +103,13 @@ end
 function StoreItem.draw(_ENV)
 	local s = 1
 	local a = sin(t / 100) / 20
-	rspr(gfx[data.sprite].bmp, x + a * 32, y - 9 - abs(a * 20), s, s, a)
-	circ(x, y, interactionRange, 29)
+	rspr(gfx[data.sprite].bmp, x + a * 32, y - 8 - abs(a * 20), s, s, a)
+	fillp(0b0111110101111101)
+	fillp(0b1010010110100101)
+	circ(x, y - 8, interactionRange + sin(t / 120) * 1.5, collectable and 11 or 0x001d)
+	fillp()
 	--debugVisuals(_ENV)
-	?a,x,y
+	--?a,x,y
 end
 
 function StoreItem.expireAll()
@@ -122,9 +125,9 @@ end
 
 function StoreItem.purchase(owner, item)
 	if owner.points["normal"] >= item.value then
-		owner.points["normal"] -= item.value
 		add(StoreItem.garbage, item)
-		local slotItem = owner.equipment[item.data.slot]
+		local slot = item.data.name -- item.data.slot
+		local slotItem = owner.equipment[slot]
 
 		-- upgrade existing item
 		if slotItem and slotItem.name == item.data.name then
@@ -134,16 +137,19 @@ function StoreItem.purchase(owner, item)
 
 			-- add a level
 			else
-				owner.equipment[item.data.slot].level += 1
+				owner.equipment[slot].level += 1
 				sfx(6)
+				owner.points["normal"] -= item.value
+				return item.data
 			end
 		else
 			-- add new item
-			owner.equipment[item.data.slot] = item.data
-			owner.equipment[item.data.slot].level = 1
+			owner.equipment[slot] = item.data
+			owner.equipment[slot].level = 1
 			sfx(5)
+			owner.points["normal"] -= item.value
+			return item.data
 		end
-		return item.data
 
 	else
 		sfx(4)
@@ -156,7 +162,9 @@ function StoreItem.spawnThem(x, y)
 
 	local pool = {}
 	for k,v in pairs(Item) do
-		add(pool, k)
+		if not v.hideFromPool then
+			add(pool, k)
+		end
 	end
 
 	for i=-1, 1 do

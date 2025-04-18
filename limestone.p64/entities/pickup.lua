@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 05:50:13",modified="2025-04-17 17:37:05",revision=3182]]
+--[[pod_format="raw",created="2025-04-15 05:50:13",modified="2025-04-18 16:22:43",revision=4490]]
 -- pickup
 -- cubee
 
@@ -72,7 +72,7 @@ function Pickup.update(_ENV)
 		closestPlayer, distance = closest(_ENV, Player.players)
 	end
 
-	local collectionRange = 48
+	local collectionRange = 48 + (closestPlayer and closestPlayer.bonusPickupRange or 0)
 
 	if intangible > 0 or distance > collectionRange + 16 or not closestPlayer then
 		latching = false

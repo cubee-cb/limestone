@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 02:21:14",modified="2025-04-17 17:37:05",revision=1056]]
+--[[pod_format="raw",created="2025-04-17 02:21:14",modified="2025-04-18 16:22:43",revision=2382]]
 -- game screen
 -- cubee
 
@@ -52,6 +52,7 @@ GameMode.game = {
 		--StoreItem:create(Item.wings, 128 * 8, 360)
 		--StoreItem:create(Item.testificate, 128 * 8, 120)
 		--StoreItem.spawnThem(128 * 8, 360)
+		
 
 		cam_x = 0
 		cam_y = 0
@@ -59,7 +60,7 @@ GameMode.game = {
 		cam_yt = 0
 
 		intermissionTimer = 3600 * 0.5 --(minutes)
-		intermission = 60 * 5 -- intermissionTimer
+		Round.intermission = 60 * 5 -- intermissionTimer
 
 		-- vertical offset from top, see:
 		-- http://higherorderfun.com/blog/2012/05/20/the-guide-to-implementing-2d-platformers/
@@ -72,16 +73,28 @@ GameMode.game = {
 			[198] = {8, 4},
 			[199] = {4, 0},
 		}
+		
+	
+
+
+		local i = 0
+		for k,_ in pairs(Item) do
+			local item = StoreItem:create(Item[k], 128 * 2 + i * 48, 120)
+			item.value = 0
+			i += 1
+			Round.intermission = 99999
+		end
+
 	end,
 
 	update = function()
 
 		-- rounds
-		if intermission > 0 then
-			intermission -= 1
+		if Round.intermission > 0 then
+			Round.intermission -= 1
 
 			-- start next round
-			if intermission <= 0 then
+			if Round.intermission <= 0 then
 
 				-- stop if there is not a valid round here
 				if Round.index > #rounds then
@@ -89,7 +102,7 @@ GameMode.game = {
 				else
 					Round.beginNext()
 					StoreItem.expireAll()
-					intermission = 0
+					Round.intermission = 0
 				end
 			end
 
@@ -99,7 +112,7 @@ GameMode.game = {
 
 			-- round is finished
 			if roundTime == 0 then
-				intermission = intermissionTimer
+				Round.intermission = intermissionTimer
 				Round.index += 1
 
 				-- create store items
@@ -111,8 +124,10 @@ GameMode.game = {
 			end
 		end
 
-		cam_xt, cam_yt = Player.updateAll()
+		Projectile.updateAll()
 		Enemy.updateAll()
+
+		cam_xt, cam_yt = Player.updateAll()
 
 		Pickup.updateAll()
 		Particle.updateAll()
@@ -155,6 +170,7 @@ GameMode.game = {
 		Enemy.drawAll()
 		Pickup.drawAll()
 		StoreItem.drawAll()
+		Projectile.drawAll()
 		Player.drawAll()
 
 		-- foreground
@@ -180,8 +196,8 @@ GameMode.game = {
 			print(pod(i.tick))
 		end]]
 
-		if intermission > 0 then
-			print("Intermission: " .. (intermission \ 60), 64, 64, 7)
+		if Round.intermission > 0 then
+			print("Intermission: " .. (Round.intermission \ 6 / 10 + 1), 64, 64, 7)
 			print("" .. (rounds[Round.index].tip or ""))
 		end
 	end,

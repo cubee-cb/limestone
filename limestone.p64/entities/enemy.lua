@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 01:28:55",modified="2025-04-17 17:37:05",revision=3923]]
+--[[pod_format="raw",created="2025-04-15 01:28:55",modified="2025-04-18 16:22:43",revision=5245]]
 -- enemies base
 -- cubee
 
@@ -8,15 +8,15 @@ include("enemy/pop.lua")
 Enemy = setmetatable({
 	enemies = {},
 	garbage = {},
-	gfx = fetch("gfx/default.gfx")
+	gfx = fetch("gfx/enemies.gfx")
 }, {__index = Entity})
 
--- create exit
+-- create enemy
 function Enemy:create(data, x, y)
 	local myData = data or {hp = 1, value = 0, update = function()end}
 
 	local enemy = setmetatable({
-		t = 0,
+		t = rnd(200),
 		x = x or 128,
 		y = y or 16,
 		xv = 0,
@@ -27,11 +27,13 @@ function Enemy:create(data, x, y)
 		flip = false,
 		jumps = 0,
 		target = {x = 0, y = 0},
+		sprite = 0,
 
 		data = myData,
 		hp = myData.hpMax or 1,
 		value = myData.value or 10,
-		myUpdate = myData.update or function()end,
+		myUpdate = myData.update,
+		myDraw = myData.draw,
 
 	}, {__index = Enemy})
 
@@ -105,10 +107,14 @@ end
 
 -- base draw
 function Enemy.draw(_ENV)
-	spr(gfx[0].bmp, x - 4, y - 16)
+	if myDraw then
+		myDraw(_ENV)
+	else
+		spr(gfx[sprite].bmp, x - 4, y - hitbox.h, flip)
+	end
 
 	debugVisuals(_ENV)
-
+--[[
 	print(cmget((x)/8,(y+4)/8), x + 16, y, 9)
-	print(target.x .." " .. target.y, x + 16, y+8, 9)
+	print(target.x .." " .. target.y, x + 16, y+8, 9)]]
 end

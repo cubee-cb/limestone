@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-16 00:37:01",modified="2025-04-17 17:37:05",revision=2193]]
+--[[pod_format="raw",created="2025-04-16 00:37:01",modified="2025-04-18 16:22:43",revision=3499]]
 -- round information
 -- cubee
 
@@ -8,6 +8,7 @@ Round = {
 	handlers = {},
 	garbage = {},
 	minDuration = 100,
+	intermission = 0,
 }
 
 function Round.createHandler(data)

@@ -1,10 +1,10 @@
---[[pod_format="raw",created="2025-04-17 01:48:27",modified="2025-04-17 17:37:05",revision=1188]]
+--[[pod_format="raw",created="2025-04-17 01:48:27",modified="2025-04-18 16:22:43",revision=2509]]
 -- pop enemy
 -- cubee
 
 Pop = {
 	hp = 1,
-	value = 2,
+	value = 1,
 	update = function(_ENV)
 		updateTarget(_ENV, closest(_ENV, Exit.exits))
 		if (not target) return
@@ -35,7 +35,7 @@ Pop = {
 		yv += grv
 
 		-- jumping
-		if target.y < y - 8 and not air then
+		if not air and target.y < y - 8 and fget(cmget(x - 16, y - 4), 0) or fget(cmget(x + 16, y - 4), 0) then
 			yv = -jmp
 		end
 
@@ -49,5 +49,12 @@ Pop = {
 		x += xv
 	   y += yv
 
+		sprite = 1 + t % 20 \ 5
+		if (air) sprite = yv < 0 and 2 or 5
+
 	end,
+	draw = function(_ENV)
+		spr(gfx[sprite].bmp, x - 4, y - 16, flip)
+
+	end
 }
