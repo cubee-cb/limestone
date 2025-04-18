@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-16 00:37:01",modified="2025-04-18 16:22:43",revision=3499]]
+--[[pod_format="raw",created="2025-04-16 00:37:01",modified="2025-04-18 20:52:32",revision=4439]]
 -- round information
 -- cubee
 
@@ -36,7 +36,7 @@ function Round.getDuration(roundData)
 
 	local length = 0
 	for data in all(roundData) do
-		length += data.amount * data.spacing
+		length += (data.amount - 1) * data.spacing
 	end
 
 	return length
@@ -102,7 +102,8 @@ function Round.update(h)
 end
 
 rounds = {
-	[1] = { -- round number
+--[[
+	{
 		tip = "test round",
 		{
 			tick = 0, -- tick to create this spawner at
@@ -110,6 +111,13 @@ rounds = {
 			amount = 5, -- amount to spawn
 			spacing = 40, -- interval between spawns
 			entrances = {1}, -- entrances to spawn at
+		},
+		{
+			tick = 0, -- tick to create this spawner at
+			type = Strobe, -- enemy class to spawn
+			amount = 5, -- amount to spawn
+			spacing = 40, -- interval between spawns
+			entrances = {2}, -- entrances to spawn at
 		},
 		{
 			tick = 120, -- tick to create this spawner at
@@ -126,9 +134,9 @@ rounds = {
 			entrances = {1, 2, 3, 4}, -- entrances to spawn at
 		},
 	},
-
-	[1.1] = { -- round number
-		tip = "Enemies start from the first entrance.",
+]]
+	{
+		tip = "Enemies appear from the upper right portal for now.",
 		{
 			tick = 0, -- tick to create this spawner at
 			type = Pop, -- enemy class to spawn
@@ -137,10 +145,20 @@ rounds = {
 			entrances = {1}, -- entrances to spawn at
 		},
 	},
-	
 
-	[2] = {
-		tip = "Enemies come through the second entrance this time.",
+	{
+		tip = "The store below the crystal opens during intermissions.",
+		{
+			tick = 0, -- tick to create this spawner at
+			type = Pop, -- enemy class to spawn
+			amount = 15, -- amount to spawn
+			spacing = 20, -- interval between spawns
+			entrances = {1}, -- entrances to spawn at
+		},
+	},
+
+	{
+		tip = "This time, enemies enter through the upper left portal.",
 		{
 			tick = 0,
 			type = Pop,
@@ -149,62 +167,173 @@ rounds = {
 			entrances = {2},
 		},
 	},
-	
 
-	[3] = {
-		tip = "A new enemy type appears.",
+	{
+		tip = "Enemies can arrive packed together more tightly.",
 		{
 			tick = 0,
 			type = Pop,
-			amount = 15,
-			spacing = 30,
-			entrances = {1},
+			amount = 20,
+			spacing = 20,
+			entrances = {2},
 		},
 		{
-			tick = 0,
-			type = Cannon,
-			amount = 4,
-			spacing = 240,
-			entrances = {1},
-		},
-		{
-			tick = 450,
+			tick = 400,
 			type = Pop,
-			amount = 15,
-			spacing = 30,
-			entrances = {1},
+			amount = 20,
+			spacing = 10,
+			entrances = {2},
 		},
 	},
 
-
-	[4] = {
-		tip = "This round, enemies come from multiple entrances. Prepare accordingly!",
+	{
+		tip = "This round, enemies come from both lower portals.",
 		{
 			tick = 0,
 			type = Pop,
-			amount = 30,
-			spacing = 20,
-			entrances = {3, 4},
+			amount = 20,
+			spacing = 15,
+			entrances = {3},
+		},
+		{
+			tick = 350,
+			type = Pop,
+			amount = 20,
+			spacing = 30,
+			entrances = {4},
 		},
 		{
 			tick = 600,
 			type = Pop,
 			amount = 20,
-			spacing = 10,
+			spacing = 20,
 			entrances = {3},
 		},
+	},
+
+	
+
+	{
+		tip = "A new enemy type appears. These ones explode.",
 		{
-			tick = 600,
-			type = Cannon,
-			amount = 8,
-			spacing = 40,
-			entrances = {4},
+			tick = 0,
+			type = Strobe,
+			amount = 2,
+			spacing = 600,
+			entrances = {3, 4},
 		},
 	},
 
 
-	[5] = {
+	{
+		tip = "This round, enemies come from both upper portals. Prepare accordingly!",
+		{
+			tick = 0,
+			type = Pop,
+			amount = 30,
+			spacing = 20,
+			entrances = {1, 2},
+		},
+		{
+			tick = 300,
+			type = Strobe,
+			amount = 2,
+			spacing = 300,
+			entrances = {1},
+		},
+		{
+			tick = 600,
+			type = Pop,
+			amount = 20,
+			spacing = 20,
+			entrances = {2},
+		},
+	},
+
+	{
+		tip = "A mix of more enemies, from the lower portals.",
+		{
+			tick = 0,
+			type = Strobe,
+			amount = 1,
+			spacing = 20,
+			entrances = {3},
+		},
+		{
+			tick = 120,
+			type = Strobe,
+			amount = 1,
+			spacing = 20,
+			entrances = {4},
+		},
+		{
+			tick = 300,
+			type = Pop,
+			amount = 10,
+			spacing = 30,
+			entrances = {3},
+		},
+		{
+			tick = 400,
+			type = Pop,
+			amount = 30,
+			spacing = 10,
+			entrances = {4},
+		},
+	},
+
+	{
+		tip = "The enemies are using 3 portals now.",
+		{
+			tick = 0,
+			type = Strobe,
+			amount = 3,
+			spacing = 120,
+			entrances = {1},
+		},
+		{
+			tick = 120,
+			type = Pop,
+			amount = 30,
+			spacing = 60,
+			entrances = {3},
+		},
+		{
+			tick = 500,
+			type = Pop,
+			amount = 20,
+			spacing = 10,
+			entrances = {4},
+		},
+	},
+
+	{
+		tip = "Did someone say disco? ...No? Oh. Well something's going on downstairs.",
+		{
+			tick = 60,
+			type = Strobe,
+			amount = 6,
+			spacing = 100,
+			entrances = {3, 4},
+		},
+	},
+
+	{
+		tip = "Introducing: Cannons! They follow the player. They are also not finished.",
+		{
+			tick = 0,
+			type = Cannon,
+			amount = 2,
+			spacing = 600,
+			entrances = {3, 4},
+		},
+	},
+
+	{
+		-- game crashes when encountering a missing round,
+		-- so just tell it to end using an extra round
 		endGame = true,
+		tip = "That's all the rounds for now! The game will end once intermission finishes.",
 
 	},
 }

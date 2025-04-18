@@ -1,9 +1,8 @@
---[[pod_format="raw",created="2025-04-15 01:28:55",modified="2025-04-18 16:22:43",revision=5245]]
+--[[pod_format="raw",created="2025-04-15 01:28:55",modified="2025-04-18 20:52:32",revision=6182]]
 -- enemies base
 -- cubee
 
 include("entities/entity.lua")
-include("enemy/pop.lua")
 
 Enemy = setmetatable({
 	enemies = {},
@@ -30,10 +29,14 @@ function Enemy:create(data, x, y)
 		sprite = 0,
 
 		data = myData,
-		hp = myData.hpMax or 1,
+		hp = myData.hp or 1,
 		value = myData.value or 10,
 		myUpdate = myData.update,
 		myDraw = myData.draw,
+
+		jumpTimer = 0,
+		deathTimer = 120,
+		dyingWish = false,
 
 	}, {__index = Enemy})
 
@@ -83,17 +86,10 @@ function Enemy.update(_ENV)
 
 	myUpdate(_ENV)
 
-	-- contact damage to exits
-	if aabb(_ENV, target) then
-		sfx(3)
-		target:damage(1)
-		add(garbage, _ENV)
-	end
-
 	-- die
-	if hp <= 0 then
+	if hp <= 0 and not dyingWish then
 		sfx(7)
-		for i = 0, value do
+		for i = 1, value do
 			Pickup:create(x, y - hitbox.h)
 		end
 		add(garbage, _ENV)

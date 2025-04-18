@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-18 16:22:43",revision=6498]]
+--[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-18 20:52:32",revision=7454]]
 -- player
 -- cubee
 
@@ -28,8 +28,10 @@ function Player:create(x, y)
 		wallslide = 0,
 		canWallJump = false,
 		jumps = 0,
-		maxJumps = 2,
-		
+		maxJumps = 1,
+
+		hp = 100,
+
 		slope = "a",
 		slopeType = 0,
 		slopeOffset = 0,
@@ -399,26 +401,44 @@ end
 -- base draw
 function Player.draw(_ENV)
 
+	local leg = (air or btn(5)) and -2 or xv != 0 and (sin(t / 30)) or 0
+
 	-- rear arm
-	spr(gfx[73].bmp, x - 16, y - hitbox.h*2 - 8.5 + sin((t - 20) / 150) * 2, flip)
+	spr(gfx[73].bmp, x - 16 - leg, y - hitbox.h*2 - 8.5 + sin((t - 20) / 150) * 2, flip)
 
 	-- main body
 	spr(gfx[64].bmp, x - 16, y - hitbox.h*2 - 8.5 + sin(t / 150) * 2, flip)
 	
 	-- leg
-	spr(gfx[82].bmp, x - 12, y - hitbox.h*2 + 16.5, flip)
-	spr(gfx[82].bmp, x - 20, y - hitbox.h*2 + 16.5, flip)
+	spr(gfx[82].bmp, x - 12, y - hitbox.h*2 + 16.5 + leg, flip)
+	spr(gfx[82].bmp, x - 20, y - hitbox.h*2 + 16.5 - leg, flip)
 
 	-- kim/vessel
 	spr(gfx[0].bmp, x - 8, y - hitbox.h*2 + 4.5 + sin(t / 150) * 2, flip)
 	--spr(gfx[1].bmp, x - 8, y - hitbox.h - 8)
 
 	-- front arm
-	spr(gfx[72].bmp, x - 16, y - hitbox.h*2 - 8.5 + sin((t - 20) / 150) * 2, flip)
+	spr(gfx[72].bmp, x - 16 + leg, y - hitbox.h*2 - 8.5 + sin((t - 20) / 150) * 2, flip)
 
 	-- run item draws
 	for slot, content in pairs(equipment) do
 		if (content.draw) content:draw(_ENV)
+	end
+
+	-- item details
+	if Round.intermission > 0 then
+		local i = Entity.closest(_ENV, StoreItem.items)
+		if i and i.collectable then
+			local item = i.data
+			local modalx = x - 120
+			local modaly = y - hitbox.h * 2 - 64
+			cursor(modalx, modaly)
+			color(7)
+			print("\#j(" .. item.value .. ") " .. item.name .. " - Max level " .. item.maxLevel)
+			print("\#j"..item.desc)
+			print("\#jPress btn 5 (X) to purchase")
+			
+		end
 	end
 
 	debugVisuals(_ENV)

@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 02:01:34",modified="2025-04-18 16:22:43",revision=4796]]
+--[[pod_format="raw",created="2025-04-15 02:01:34",modified="2025-04-18 20:52:32",revision=5720]]
 -- exit
 -- cubee
 
@@ -28,6 +28,11 @@ function Exit:create(x, y)
 	add(Exit.exits, ex)
 
 	return ex
+end
+
+function Exit.damage(t, damage)
+	t.hp -= damage
+	sfx(3)
 end
 
 -- update all exits and return amount of exits
@@ -77,5 +82,5 @@ function Exit.draw(_ENV)
 
 	debugVisuals(_ENV)
 
-	print("hp: " .. hp, x - 16, y - hitbox.h * 2 - 32, 9)
+	print("\#2HP: " .. hp, x - 16, y - hitbox.h * 2 - 32, hp > 50 and 11 or hp <= 10 and 8 or 9)
 end

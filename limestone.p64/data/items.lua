@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 11:53:59",modified="2025-04-18 16:22:43",revision=2151]]
+--[[pod_format="raw",created="2025-04-17 11:53:59",modified="2025-04-18 20:52:32",revision=3111]]
 -- items
 -- cubee
 
@@ -7,8 +7,8 @@ Item = {
 		hideFromPool = true,
 		sprite = 3,
 		name = "Villager dude",
-		desc = "Does things. Press up to ascend.",
-		value = 5,
+		desc = "Bypass the speed cap.",
+		value = 150,
 		slot = "pet",
 		maxLevel = 10,
 		init = function(self, owner, origin)
@@ -30,17 +30,12 @@ Item = {
 	wings = {
 		sprite = 1,
 		name = "Wings",
-		desc = "Hold up to fly. Levels increase vertical speed.", -- "Adds to your maximum jumps.",
-		value = 300,
+		desc = "Grants an extra jump.", -- "Adds to your maximum jumps.",
+		value = 40,
 		slot = "back",
 		maxLevel = 3,
 		init = function(self, owner, origin)
-		end,
-		update = function(self, owner)
-			if (btn(2)) owner.yv = min(-(self.level + 1), owner.yv)
-		end,
-		draw = function(self, owner)
-			circ(owner.x, owner.y, 48, 11)
+			owner.maxJumps += 1
 		end,
 	},
 
@@ -55,7 +50,7 @@ Item = {
 			owner.hitbox.h += level == 1 and 12 or 2
 		end,
 		update = function(self, owner)
-			local damage = abs(owner.xv) * self.level / 2
+			local damage = abs(owner.xv) * self.level / 4
 			local range = 18 + 6 * self.level
 
 			-- deal velocity-based damage to the closest enemy
@@ -68,16 +63,16 @@ Item = {
 			end
 		end,
 		draw = function(self, owner)
-			spr(owner.gfx[80].bmp, owner.x - 12, owner.y - owner.hitbox.h*2 + 21, owner.flip)
-			spr(owner.gfx[80].bmp, owner.x - 20, owner.y - owner.hitbox.h*2 + 21, owner.flip)
+			spr(owner.gfx[87 + self.level].bmp, owner.x - 12, owner.y - owner.hitbox.h*2 + 21, owner.flip)
+			spr(owner.gfx[87 + self.level].bmp, owner.x - 20, owner.y - owner.hitbox.h*2 + 21, owner.flip)
 		end,
 	},
-	
+
 	flameBreath = {
 		hideFromPool = true,
 		sprite = 4,
-		name = "Item",
-		desc = "Blank.",
+		name = "Red Hot Chili Pepper",
+		desc = "Breath fire.",
 		value = 50,
 		--slot = "arms",
 		maxLevel = 5,
@@ -88,12 +83,12 @@ Item = {
 		draw = function(self, owner)
 		end,
 	},
-	
+
 	grappleTongue = {
 		hideFromPool = true,
 		sprite = 5,
-		name = "Item",
-		desc = "Blank.",
+		name = "Really long tongue",
+		desc = "Grapple enemies.",
 		value = 50,
 		--slot = "arms",
 		maxLevel = 5,
@@ -104,12 +99,12 @@ Item = {
 		draw = function(self, owner)
 		end,
 	},
-	
+
 	impostorTongue = {
 		hideFromPool = true,
 		sprite = 6,
-		name = "Item",
-		desc = "Blank.",
+		name = "Really Pointy Tongue",
+		desc = "Impale enemies.",
 		value = 50,
 		--slot = "arms",
 		maxLevel = 5,
@@ -120,12 +115,12 @@ Item = {
 		draw = function(self, owner)
 		end,
 	},
-	
+
 	laserEyes = {
 		hideFromPool = true,
 		sprite = 7,
-		name = "Item",
-		desc = "Blank.",
+		name = "Laser Eyes",
+		desc = "Shoot lasers from your eyes.",
 		value = 50,
 		--slot = "arms",
 		maxLevel = 5,
@@ -168,12 +163,12 @@ Item = {
 		draw = function(self, owner)
 		end,
 	},
-	
+
 	malletFist = {
 		hideFromPool = true,
 		sprite = 10,
-		name = "Item",
-		desc = "Strongg.",
+		name = "Brass Mallets",
+		desc = "Like brass knuckles, but with a lot more mass.",
 		value = 50,
 		--slot = "arms",
 		maxLevel = 5,
@@ -184,21 +179,22 @@ Item = {
 		draw = function(self, owner)
 		end,
 	},
-	
+
 	longClawDash = {
 		sprite = 27, --11,
 		name = "Telefragger",
 		desc = "Teleport into enemies to damage them.",
-		value = 50,
+		value = 60,
 		--slot = "arms",
 		maxLevel = 3,
 		init = function(self, owner, origin)
 			self.target = false
+			self.cooldown = 120
 		end,
 		update = function(self, owner)
 			local distance = 0
 			self.target, distance = Entity.closest(owner, Enemy.enemies)
-			if btnp(5) and owner.air then
+			if btnp(5) and owner.air and self.cooldown <= 0 then
 				if self.target and distance <= 64 + self.level * 16 then
 					sfx(18)
 					owner.x = self.target.x
@@ -206,8 +202,11 @@ Item = {
 					owner.yv = -2.5
 					owner.xv = owner.flip and -1 or 1
 					self.target:damage(self.level ^ 2)
+					self.cooldown = 130 - (self.level * 10)
 				end
 			end
+
+			self.cooldown = max(self.cooldown - 1)
 		end,
 		draw = function(self, owner)
 			if self.target then
@@ -216,13 +215,13 @@ Item = {
 			end
 		end,
 	},
-	
+
 	revolver = {
 		hideFromPool = true,
 		sprite = 12,
-		name = "Item",
+		name = "Old-timey Revolver",
 		desc = "Gun.",
-		value = 50,
+		value = 70,
 		--slot = "arms",
 		maxLevel = 5,
 		init = function(self, owner, origin)
@@ -238,7 +237,7 @@ Item = {
 		sprite = 13,
 		name = "Item",
 		desc = "Long range melee.",
-		value = 50,
+		value = 25,
 		--slot = "arms",
 		maxLevel = 5,
 		init = function(self, owner, origin)
@@ -269,7 +268,7 @@ Item = {
 		sprite = 15,
 		name = "Gunboots",
 		desc = "Great for a safely descending down wells.",
-		value = 100,
+		value = 80,
 		--slot = "arms",
 		maxLevel = 5,
 		init = function(self, owner, origin)
@@ -282,7 +281,7 @@ Item = {
 				self.ammo -= 1
 				sfx(self.ammo > 2 and 15 or self.ammo > 0 and 16 or self.ammo <= 0 and 17)
 			
-				Projectile:create(Projectile.downBullet, owner.x, owner.y, 0, 8, 0.5 + self.level / 2)
+				Projectile:create(Projectile.downBullet, owner.x, owner.y, 0, 8, 1.5 + self.level / 2)
 			end
 		
 			if not owner.air and self.ammo < self.maxAmmo then
@@ -304,19 +303,19 @@ Item = {
 	spectre = {
 		sprite = 16,
 		name = "Spectral Impulse",
-		desc = "Defeated enemies release spectres that attack other enemies.",
+		desc = "Defeated enemies release spectres that damage other enemies.",
 		value = 60,
 		--slot = "arms",
 		maxLevel = 5,
 		onKill = function(self, victim)
-			Projectile:create(Projectile.spectre, victim.x, victim.y, 0, -3, self.level)
+			Projectile:create(Projectile.spectre, victim.x, victim.y - victim.hitbox.h * 2, 0, -3, self.level / 2)
 		end,
 	},
-	
+
 	thrusters = {
 		sprite = 17,
 		name = "Rocket Thrusters",
-		desc = "Up we go!",
+		desc = "Hold Up to fly. Fuel recharges on the ground.",
 		value = 120,
 		--slot = "arms",
 		maxLevel = 5,
@@ -325,7 +324,7 @@ Item = {
 			self.fuel = self.maxFuel
 		end,
 		update = function(self, owner)
-			if self.fuel > 0 and btn(4) then
+			if self.fuel > 0 and btn(4) and not btn(3) then
 				owner.yv = min(owner.yv, -1 - (self.level / 3))
 				self.fuel -= 1
 			end
@@ -348,7 +347,7 @@ Item = {
 		sprite = 18,
 		name = "Ice Skates",
 		desc = "Leave an ice trail. Slippery.",
-		value = 50,
+		value = 20,
 		--slot = "arms",
 		maxLevel = 5,
 		init = function(self, owner, origin)
@@ -358,7 +357,7 @@ Item = {
 		draw = function(self, owner)
 		end,
 	},
-	
+
 	bladeAura = {
 		hideFromPool = true,
 		sprite = 19,
@@ -380,7 +379,7 @@ Item = {
 		sprite = 20,
 		name = "Flame Trail",
 		desc = "Damage over time trail.",
-		value = 50,
+		value = 40,
 		--slot = "arms",
 		maxLevel = 5,
 		init = function(self, owner, origin)
@@ -411,7 +410,7 @@ Item = {
 		sprite = 22,
 		name = "Magnetism",
 		desc = "Draw in pickups from further away.",
-		value = 75,
+		value = 20,
 		--slot = "arms",
 		maxLevel = 10,
 		init = function(self, owner, origin)
@@ -420,6 +419,7 @@ Item = {
 	},
 	
 	bigRock = {
+		hideFromPool = true,
 		sprite = 23,
 		name = "Big rock",
 		desc = "Big rock.",
@@ -448,7 +448,7 @@ Item = {
 		sprite = 24,
 		name = "Bouncy",
 		desc = "Bounce idk.",
-		value = 50,
+		value = 20,
 		--slot = "arms",
 		maxLevel = 5,
 		init = function(self, owner, origin)
@@ -465,7 +465,7 @@ Item = {
 		sprite = 25,
 		name = "Charge Dash",
 		desc = "Hold Down and tap Jump to charge a dash.",
-		value = 25,
+		value = 40,
 		--slot = "arms",
 		maxLevel = 4,
 		init = function(self, owner, origin)
@@ -497,7 +497,7 @@ Item = {
 		name = "Nemesis",
 		--desc = "A rather large yellow bird with a laser gun. May request salary.",
 		desc = "A rather large yellow bird, with a laser gun.",
-		value = 50,
+		value = 80,
 		--slot = "arms",
 		maxLevel = 5,
 		init = function(self, owner, origin)
@@ -516,7 +516,7 @@ Item = {
 
 			local xt, yt =
 				owner.x + cos(owner.t / 600) * 48,
-				owner.y - owner.hitbox.h + sin(owner.t / 600) * 32
+				owner.y - owner.hitbox.h * 2 - 16 + sin(owner.t / 600) * 24
 			self.xv += (xt - self.x) / 200
 			self.yv += (yt - self.y) / 200
 

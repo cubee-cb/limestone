@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-18 14:14:25",modified="2025-04-18 16:22:43",revision=485]]
+--[[pod_format="raw",created="2025-04-18 14:14:25",modified="2025-04-18 20:52:32",revision=1444]]
 -- projectile
 -- cubee
 
@@ -51,6 +51,31 @@ Projectile = setmetatable({
 		a = deltaToAngle(xv, yv)
 	end,
 
+	spectre = function(_ENV, init)
+		if init then
+			collideGround = false
+			return
+		end
+		sprite = 3
+
+		local target = Entity.closest(_ENV, Enemy.enemies)
+		if target then
+			xv += (target.x - x) / 400
+			yv += (target.y - y) / 400
+
+			local m = 5
+			xv = mid(-m, xv, m)
+			yv = mid(-m, yv, m)
+		else
+			--lifespan = 0
+		end
+
+		x += xv
+		y += yv
+
+		a = deltaToAngle(xv, yv)
+	end,
+
 }, {__index = Entity})
 
 -- create projectile
@@ -75,6 +100,7 @@ function Projectile:create(u, x, y, xv, yv, damage)
 		lifespanMax = 600,
 		damage = damage or 1,
 		friendly = true,
+		collideGround = true,
 
 	}, {__index = Projectile})
 
@@ -116,7 +142,7 @@ function Projectile.update(_ENV)
 
 	lifespan -= #Projectile.projectiles > 100 and 30 or 1
 
-	if lifespan <= 0 or fget(cmget(x, y), 0) then
+	if lifespan <= 0 or (fget(cmget(x, y), 0) and collideGround) then
 		add(garbage, _ENV)
 		for i = 1, 5 do
 			Particle:create(Particle.dust, x, y)

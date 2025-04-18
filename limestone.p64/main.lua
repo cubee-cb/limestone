@@ -1,16 +1,16 @@
---[[pod_format="raw",created="2024-03-18 18:22:30",modified="2025-04-18 16:22:43",revision=6409]]
--- limestone (internal)
+--[[pod_format="raw",created="2024-03-18 18:22:30",modified="2025-04-18 20:52:32",revision=7350]]
+-- limestone (internal name)
 -- by cubee
 
 --[[
-still in the habit of token optimisaiton, so I use _ENV everywhere.
+still in the habit of token optimisation, so I use _ENV everywhere.
 will use better inheritance in the future.
 ]]
 
 --[[
 db = {
-	--collision = true,
-	--entityCollision = true,
+	collision = true,
+	entityCollision = true,
 }
 --]]
 
@@ -23,6 +23,10 @@ include("entities/pickup.lua")
 include("entities/particle.lua")
 include("entities/storeItem.lua")
 include("entities/projectile.lua")
+
+include("enemy/pop.lua")
+include("enemy/strobe.lua")
+include("enemy/cannon.lua")
 
 include("helpers/motion.lua")
 include("helpers/map.lua")
@@ -39,10 +43,10 @@ include("mode/dead.lua")
 function _init()
 	poke(0x5f5c, 255)
 	poke(0x550b,0x3f)
-	
+
 	gt = 0
 	GameMode.go(GameMode.title)
-	GameMode.go(GameMode.game)
+	--GameMode.go(GameMode.game)
 
 end
 

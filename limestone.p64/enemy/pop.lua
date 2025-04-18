@@ -1,10 +1,10 @@
---[[pod_format="raw",created="2025-04-17 01:48:27",modified="2025-04-18 16:22:43",revision=2509]]
+--[[pod_format="raw",created="2025-04-17 01:48:27",modified="2025-04-18 20:52:32",revision=3436]]
 -- pop enemy
 -- cubee
 
 Pop = {
 	hp = 1,
-	value = 1,
+	value = 2,
 	update = function(_ENV)
 		updateTarget(_ENV, closest(_ENV, Exit.exits))
 		if (not target) return
@@ -52,9 +52,15 @@ Pop = {
 		sprite = 1 + t % 20 \ 5
 		if (air) sprite = yv < 0 and 2 or 5
 
+		-- contact damage to target
+		if aabb(_ENV, target) then
+			target:damage(1)
+			add(garbage, _ENV)
+		end
+
 	end,
 	draw = function(_ENV)
-		spr(gfx[sprite].bmp, x - 4, y - 16, flip)
+		spr(gfx[sprite].bmp, x - 8, y - 16, flip)
 
 	end
 }

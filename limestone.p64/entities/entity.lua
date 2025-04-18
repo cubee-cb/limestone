@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 02:20:17",modified="2025-04-18 16:22:43",revision=4956]]
+--[[pod_format="raw",created="2025-04-15 02:20:17",modified="2025-04-18 20:52:32",revision=5890]]
 -- entity
 -- cubee
 
@@ -75,7 +75,7 @@ function Entity.closest(me, pool, range)
 	local range = range or 4096
 	for o in all(pool) do
 		local dist = sqrt((me.x - o.x)^2 + (me.y - o.y)^2)
-		if dist < range then
+		if dist < range and (not o.hp or o.hp > 0) and not o.dyingWish then
 			near = o
 			range = dist
 		end

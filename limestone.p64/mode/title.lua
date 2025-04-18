@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 02:19:17",modified="2025-04-18 16:22:43",revision=2331]]
+--[[pod_format="raw",created="2025-04-17 02:19:17",modified="2025-04-18 20:52:32",revision=3263]]
 -- title screen
 -- cubee
 
@@ -15,8 +15,12 @@ GameMode.title = {
 	end,
 
 	draw = function()
-		cls(2)
-		print("that old limestone mine down the road", 64, 64, 7)
-		print("Press btn 4 (Z) to start", 64, 200, 7)
+		cls(1)
+		print("\^pMidlink", 64, 64, 7)
+		print(" ")
+		print("Jump with (Z or C) and basic attack with (X or V).")
+		print("Protect the crystal: defeat enemies, collect points, buy upgrades.")
+		print("You can start rounds early by pressing btn 5 (X or V) on the crystal.")
+		print("Press (Z or C) to start.", 64, 200, 7)
 	end,
 }

@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 02:21:14",modified="2025-04-18 16:22:43",revision=2382]]
+--[[pod_format="raw",created="2025-04-17 02:21:14",modified="2025-04-18 20:52:32",revision=3330]]
 -- game screen
 -- cubee
 
@@ -36,7 +36,7 @@ GameMode.game = {
 		--Enemy:create(9*128 + 64, 0)
 		--Enemy:create(10*128 + 64, 0)
 
-		Exit:create(8*128, 0)
+		Exit:create(8*128, 64)
 		--Exit:create(9*128, 0)
 		--Exit:create(10*128, 0)
 
@@ -53,6 +53,7 @@ GameMode.game = {
 		--StoreItem:create(Item.testificate, 128 * 8, 120)
 		--StoreItem.spawnThem(128 * 8, 360)
 		
+		--Enemy:create(Strobe, 10*128 + 64, 0)
 
 		cam_x = 0
 		cam_y = 0
@@ -60,7 +61,7 @@ GameMode.game = {
 		cam_yt = 0
 
 		intermissionTimer = 3600 * 0.5 --(minutes)
-		Round.intermission = 60 * 5 -- intermissionTimer
+		Round.intermission = intermissionTimer -- 60 * 5 --
 
 		-- vertical offset from top, see:
 		-- http://higherorderfun.com/blog/2012/05/20/the-guide-to-implementing-2d-platformers/
@@ -76,7 +77,7 @@ GameMode.game = {
 		
 	
 
-
+--[[
 		local i = 0
 		for k,_ in pairs(Item) do
 			local item = StoreItem:create(Item[k], 128 * 2 + i * 48, 120)
@@ -84,7 +85,7 @@ GameMode.game = {
 			i += 1
 			Round.intermission = 99999
 		end
-
+--]]
 	end,
 
 	update = function()
@@ -187,8 +188,8 @@ GameMode.game = {
 		end
 		--]]
 		--print(cmget(2, 33), 32, 16, 12)
-		print("Round: " .. Round.index .. " (" .. Round.tick .. "/" .. Round.minDuration .. ")")
-		print("Points: " .. player.points["normal"])
+		print("\#1Round: " .. Round.index .. " (" .. Round.tick .. "/" .. Round.minDuration .. ")")
+		print("\#1Points: " .. player.points["normal"])
 	--[[
 		print(pod(rounds[Round.index]))
 		for k,i in ipairs(rounds[Round.index]) do
@@ -197,8 +198,9 @@ GameMode.game = {
 		end]]
 
 		if Round.intermission > 0 then
-			print("Intermission: " .. (Round.intermission \ 6 / 10 + 1), 64, 64, 7)
-			print("" .. (rounds[Round.index].tip or ""))
+			print("\#2Intermission: " .. (Round.intermission \ 6 / 10), 32, 220, 7)
+			print("\#2" .. (rounds[Round.index].tip or ""))
+			print("\#2\f6Press (X or V) near the crystal to end intermission early.")
 		end
 	end,
 }

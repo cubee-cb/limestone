@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 02:29:30",modified="2025-04-18 16:22:43",revision=2255]]
+--[[pod_format="raw",created="2025-04-17 02:29:30",modified="2025-04-18 20:52:32",revision=3173]]
 -- game over screen
 -- cubee
 
@@ -16,10 +16,11 @@ GameMode.dead = {
 
 	draw = function()
 		cls(0)
-		print("you are not a winner today...", 64, 64, 8)
+		print("You are not a winner today...", 64, 64, 8)
 		color(7)
-		print("you failed to defend your source,")
-		print("which made it very sad and you died")
-		print("Press btn 4 (Z) to return to title", 64, 200, 7)
+		print("You failed to defend your source,")
+		print("which made it very sad and caused you to perish.")
+		print("Your vessel is now free.")
+		print("Press (Z or C) to return to the title.", 64, 200, 7)
 	end,
 }
