@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-18 17:09:45",modified="2025-04-20 12:14:37",revision=1286]]
+--[[pod_format="raw",created="2025-04-18 17:09:45",modified="2025-04-20 14:48:45",revision=1328]]
 -- cannon enemy
 -- cubee
 
@@ -50,7 +50,7 @@ Cannon = {
 			xv = flip and -top or top
 		end
 
-		standOnPlatforms = target.y <= y + 8
+		standOnPlatforms = true -- target.y <= y + 8
    	--local standingTile = cmget(x, y + hitbox.h - 1)
 
 		-- collisions

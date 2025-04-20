@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 01:48:27",modified="2025-04-20 12:14:37",revision=3955]]
+--[[pod_format="raw",created="2025-04-17 01:48:27",modified="2025-04-20 14:48:46",revision=3995]]
 -- pop enemy
 -- cubee
 
@@ -19,27 +19,38 @@ Pop = {
 		end
 
 		-- left
-		if target.x < x then
+		if target.x < x and jumpTimer < 0 then
 	
 			if (xv >- top) xv -= acc
 			flip = true
 
 		-- right
-		elseif target.x > x then
+		elseif target.x > x and jumpTimer < 0 then
 
 			if (xv < top) xv += acc
 			flip = false
 
+		elseif xv ~= 0 then
+			-- friction
+			xv -= sgn(xv) / 15
+			if abs(xv) <= 0.07 then
+				xv = 0
+			end
 		end
 
 		yv += grv
 
 		-- jumping
-		if not air and target.y < y - 8 and fget(cmget(x - 16, y - 4), 0) or fget(cmget(x + 16, y - 4), 0) then
+		if not air and jumpTimer <= 0 and target.y < y - 8 and (fget(cmget(x - 16, y - 4), 0) or fget(cmget(x + 16, y - 4), 0)) then
+			jumpTimer = 10
+		end
+		jumpTimer = max(jumpTimer - 1, -1)
+		if jumpTimer == 0 then
 			yv = -jmp
+			xv = flip and -top or top
 		end
 
-		standOnPlatforms = target.y <= y + 8
+		standOnPlatforms = target.y <= y + 8 or abs(target.x - x) > 32
    	--local standingTile = cmget(x, y + hitbox.h - 1)
 
 		-- collisions
@@ -50,6 +61,7 @@ Pop = {
 	   y += yv
 
 		sprite = 1 + t % 20 \ 5
+		if (jumpTimer > 0) sprite = 6
 		if (air) sprite = yv < 0 and 2 or 5
 
 		-- contact damage to target

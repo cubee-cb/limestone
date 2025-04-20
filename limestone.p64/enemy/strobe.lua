@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-18 16:15:13",modified="2025-04-20 12:14:37",revision=1562]]
+--[[pod_format="raw",created="2025-04-18 16:15:13",modified="2025-04-20 14:48:46",revision=1596]]
 -- strobe enemy
 -- cubee
 
@@ -94,7 +94,7 @@ Strobe = {
 			xv = flip and -top or top
 		end
 
-		standOnPlatforms = target.y <= y + 8
+		standOnPlatforms = target.y <= y + 8 or abs(target.x - x) > 32
    	--local standingTile = cmget(x, y + hitbox.h - 1)
 
 		-- collisions
@@ -133,7 +133,7 @@ ProudStrobe = {
 		pal(9, bpal[i])
 		pal(10, dpal[i])
 		spr(gfx[sprite].bmp, x - 12, y - 24, flip)
-		pal(9, 10)
+		pal(9, 9)
 		pal(10, 10)
 
 	end,
