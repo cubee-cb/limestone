@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 11:53:59",modified="2025-04-20 14:48:45",revision=3737]]
+--[[pod_format="raw",created="2025-04-17 11:53:59",modified="2025-04-20 14:59:39",revision=3742]]
 -- items
 -- cubee
 
@@ -35,7 +35,7 @@ Item = {
 		value = 40,
 		slot = "back",
 		maxLevel = 3,
-		incompatible = {"thrusters"},
+		incompatible = {"thrusters", "gunboots"},
 		init = function(self, owner, origin)
 			owner.maxJumps += 1
 		end,
@@ -293,7 +293,7 @@ Item = {
 		value = 80,
 		--slot = "arms",
 		maxLevel = 5,
-		incompatible = {"stilts"},
+		incompatible = {"stilts", "wings"},
 		init = function(self, owner, origin)
 			self.maxAmmo = 6 + self.level * 2
 			self.ammo = self.maxAmmo
