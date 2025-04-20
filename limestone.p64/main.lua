@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2024-03-18 18:22:30",modified="2025-04-18 20:52:32",revision=7350]]
+--[[pod_format="raw",created="2024-03-18 18:22:30",modified="2025-04-20 12:14:37",revision=7869]]
 -- limestone (internal name)
 -- by cubee
 
@@ -46,7 +46,7 @@ function _init()
 
 	gt = 0
 	GameMode.go(GameMode.title)
-	--GameMode.go(GameMode.game)
+	GameMode.go(GameMode.game)
 
 end
 

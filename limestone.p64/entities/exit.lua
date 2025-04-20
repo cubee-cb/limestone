@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 02:01:34",modified="2025-04-18 20:52:32",revision=5720]]
+--[[pod_format="raw",created="2025-04-15 02:01:34",modified="2025-04-20 12:14:37",revision=6246]]
 -- exit
 -- cubee
 
@@ -30,9 +30,18 @@ function Exit:create(x, y)
 	return ex
 end
 
-function Exit.damage(t, damage)
-	t.hp -= damage
+function Exit.damage(t, damage, source)
+	if (t.hp <= 0) return
+	Round.flawless = false
+
+	if Round.warning <= 0 then
+		sfx(22)
+	end
 	sfx(3)
+
+	t.hp -= damage
+
+	Round.warning = 60 * 3
 end
 
 -- update all exits and return amount of exits

@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-18 16:15:13",modified="2025-04-18 20:52:32",revision=1023]]
+--[[pod_format="raw",created="2025-04-18 16:15:13",modified="2025-04-20 12:14:37",revision=1562]]
 -- strobe enemy
 -- cubee
 
@@ -42,7 +42,7 @@ Strobe = {
 
 				local exit, distance = Entity.closest(_ENV, Exit.exits)
 				if exit and distance <= r then
-					exit:damage(10)
+					exit:damage(10, _ENV)
 					sfx(3)
 				end
 
@@ -119,5 +119,36 @@ Strobe = {
 	draw = function(_ENV)
 		spr(gfx[sprite].bmp, x - 12, y - 24, flip)
 
-	end
+	end,
+}
+
+ProudStrobe = {
+	hp = 10,
+	value = 12,
+	update = Strobe.update,
+	draw = function(_ENV)
+		local bpal = {10, 11, 28, 29, 23, 8, 9}
+		local dpal = {9, 11, 12, 30, 14, 24, 25}
+		local i = t % 70 \ 10 + 1
+		pal(9, bpal[i])
+		pal(10, dpal[i])
+		spr(gfx[sprite].bmp, x - 12, y - 24, flip)
+		pal(9, 10)
+		pal(10, 10)
+
+	end,
+}
+
+Strobe2 = {
+	hp = 15,
+	value = 20,
+	update = Strobe.update,
+	draw = Strobe.draw
+}
+
+ProudStrobe2 = {
+	hp = 30,
+	value = 40,
+	update = Strobe.update,
+	draw = ProudStrobe.draw
 }

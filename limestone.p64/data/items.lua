@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 11:53:59",modified="2025-04-18 20:52:32",revision=3111]]
+--[[pod_format="raw",created="2025-04-17 11:53:59",modified="2025-04-20 12:14:37",revision=3709]]
 -- items
 -- cubee
 
@@ -11,6 +11,7 @@ Item = {
 		value = 150,
 		slot = "pet",
 		maxLevel = 10,
+		incompatible = {"stilts", "longClawDash", "spectre", "wings", "thrusters"},
 		init = function(self, owner, origin)
 			owner.yv = -5
 
@@ -34,6 +35,7 @@ Item = {
 		value = 40,
 		slot = "back",
 		maxLevel = 3,
+		incompatible = {"thrusters"},
 		init = function(self, owner, origin)
 			owner.maxJumps += 1
 		end,
@@ -46,6 +48,7 @@ Item = {
 		value = 50,
 		slot = "feet",
 		maxLevel = 5,
+		incompatible = {"gunboots", "iceSkates"},
 		init = function(self, owner, origin)
 			owner.hitbox.h += level == 1 and 12 or 2
 		end,
@@ -184,35 +187,54 @@ Item = {
 		sprite = 27, --11,
 		name = "Telefragger",
 		desc = "Teleport into enemies to damage them.",
-		value = 60,
+		value = 75,
 		--slot = "arms",
-		maxLevel = 3,
+		maxLevel = 5,
+		incompatible = {"grappleTongue"},
 		init = function(self, owner, origin)
 			self.target = false
 			self.cooldown = 120
+			self.ticks = 0
 		end,
 		update = function(self, owner)
 			local distance = 0
-			self.target, distance = Entity.closest(owner, Enemy.enemies)
-			if btnp(5) and owner.air and self.cooldown <= 0 then
-				if self.target and distance <= 64 + self.level * 16 then
-					sfx(18)
-					owner.x = self.target.x
-					owner.y = self.target.y - self.target.hitbox.h + 4
-					owner.yv = -2.5
-					owner.xv = owner.flip and -1 or 1
-					self.target:damage(self.level ^ 2)
-					self.cooldown = 130 - (self.level * 10)
-				end
+			self.target, distance = Entity.closest(owner, Enemy.enemies, self.ticks == 0 and (64 + self.level * 16) or (24 + self.level * 4))
+			if ((not owner.air or self.cooldown > 0) and self.ticks <= 0) self.target = false
+
+			-- start teleports
+			if btnp(5) and self.target then
+				self.ticks = self.level
+				self.cooldown = 130 - (self.level * 10)
 			end
 
-			self.cooldown = max(self.cooldown - 1)
+			-- teleport to closest target
+			if self.cooldown % 5 == 0 and self.ticks > 0 then
+				if self.target then
+					sfx(24)
+					owner.x = self.target.x
+					owner.y = self.target.y - self.target.hitbox.h + 4
+					owner.yv = -3.5
+					owner.xv = self.target.x < owner.x and -2 or 2
+					self.target:damage(4 + self.level, owner)
+				else
+					--sfx()
+				end
+				self.ticks -= 1
+			end
+
+			self.cooldown = max(self.cooldown - 1, -1)
+			if self.cooldown == 0 then
+				sfx(23)
+			end
 		end,
 		draw = function(self, owner)
+			-- target
 			if self.target then
-				spr(owner.gfx[136 + owner.t % 20 \ 10], self.target.x, self.target.y - self.target.hitbox.h)
-				circ(self.target.x, self.target.y, 64, 8)
+				--spr(owner.gfx[136 + owner.t % 20 \ 10].bmp, self.target.x, self.target.y - self.target.hitbox.h)
+				local s = 1 + sin(owner.t / 15) * 0.1
+				rspr(owner.gfx[136 + owner.t % 20 \ 10].bmp, self.target.x, self.target.y - self.target.hitbox.h, s, s, owner.t / 100)
 			end
+			--print(self.ticks, owner.x, owner.y)
 		end,
 	},
 
@@ -263,7 +285,7 @@ Item = {
 		draw = function(self, owner)
 		end,
 	},
-	
+
 	gunboots = {
 		sprite = 15,
 		name = "Gunboots",
@@ -271,22 +293,25 @@ Item = {
 		value = 80,
 		--slot = "arms",
 		maxLevel = 5,
+		incompatible = {"stilts"},
 		init = function(self, owner, origin)
 			self.maxAmmo = 6 + self.level * 2
 			self.ammo = self.maxAmmo
 		end,
 		update = function(self, owner)
-			if self.ammo > 0 and owner.yv > 0.2 and btnp(4) then
-				owner.yv = -0.5
+			if self.ammo > 0 and owner.yv >= 0 and btnp(4) then
+				owner.yv = min(owner.yv, -0.5)
 				self.ammo -= 1
 				sfx(self.ammo > 2 and 15 or self.ammo > 0 and 16 or self.ammo <= 0 and 17)
 			
-				Projectile:create(Projectile.downBullet, owner.x, owner.y, 0, 8, 1.5 + self.level / 2)
+				for i = -1, 1, 2 do
+					Projectile:create(Projectile.downBullet, owner.x + i * 4, owner.y, i, 8, 0.5 + self.level / 2, owner)
+				end
 			end
 		
 			if not owner.air and self.ammo < self.maxAmmo then
 				self.ammo = self.maxAmmo
-				sfx()
+				sfx(13)
 			end
 		
 			self.ammo = mid(0, self.ammo, self.maxAmmo)
@@ -308,7 +333,7 @@ Item = {
 		--slot = "arms",
 		maxLevel = 5,
 		onKill = function(self, victim)
-			Projectile:create(Projectile.spectre, victim.x, victim.y - victim.hitbox.h * 2, 0, -3, self.level / 2)
+			Projectile:create(Projectile.spectre, victim.x, victim.y - victim.hitbox.h * 2, 0, -3, self.level / 2, owner)
 		end,
 	},
 
@@ -319,6 +344,7 @@ Item = {
 		value = 120,
 		--slot = "arms",
 		maxLevel = 5,
+		incompatible = {"wings"},
 		init = function(self, owner, origin)
 			self.maxFuel = 30 + 30 * self.level
 			self.fuel = self.maxFuel
@@ -350,6 +376,7 @@ Item = {
 		value = 20,
 		--slot = "arms",
 		maxLevel = 5,
+		incompatible = {"stilts", "flameTrail"},
 		init = function(self, owner, origin)
 		end,
 		update = function(self, owner)
@@ -367,6 +394,7 @@ Item = {
 		--slot = "arms",
 		maxLevel = 5,
 		init = function(self, owner, origin)
+			self.flameLevel = 0
 		end,
 		update = function(self, owner)
 		end,
@@ -375,18 +403,32 @@ Item = {
 	},
 	
 	flameTrail = {
-		hideFromPool = true,
 		sprite = 20,
 		name = "Flame Trail",
-		desc = "Damage over time trail.",
-		value = 40,
+		desc = "Leave behind flames as you move.",
+		value = 35,
 		--slot = "arms",
 		maxLevel = 5,
+		incompatible = {"iceSkates"},
 		init = function(self, owner, origin)
+			self.active = true
 		end,
 		update = function(self, owner)
+			if owner.equipment.bladeAura then
+				owner.equipment.bladeAura.flameLevel = self.level
+				self.active = false
+				return
+			else
+				self.active = true
+
+				if owner.t % (11 - self.level) == 0 then
+					local s = 0.75
+					Projectile:create(Projectile.flame, owner.x, owner.y - owner.hitbox.h, owner.xv / 2, owner.yv * s, self.level * s, owner)
+				end
+			end
 		end,
 		draw = function(self, owner)
+			if (not self.active) return
 		end,
 	},
 	
@@ -433,7 +475,7 @@ Item = {
 			if btnp(5) and self.cooldown <= 0 then
 				local s = 8 + self.level * 2
 				local damage = 7 + self.level * 3
-				Projectile:create(Projectile.bigRock, owner.x, owner.y, owner.flip and -s or s, -1, damage)
+				Projectile:create(Projectile.bigRock, owner.x, owner.y, owner.flip and -s or s, -1, damage, owner)
 				self.cooldown = 60 * 5
 			end
 
@@ -536,7 +578,7 @@ Item = {
 					local xv, yv = normalise(self.target.x - self.x, self.target.y - self.y, 8)
 
 					Particle:create(Particle.dust, self.x + (self.flip and -8 or 8), self.y - 9, self.flip and -3 or 3, -1)
-					Projectile:create(Projectile.laser, self.x, self.y, xv, yv, self.level)
+					Projectile:create(Projectile.laser, self.x, self.y, xv, yv, self.level, owner)
 
 					self.cooldown = 60
 					sfx(19)

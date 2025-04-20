@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-16 00:37:01",modified="2025-04-18 20:52:32",revision=4439]]
+--[[pod_format="raw",created="2025-04-16 00:37:01",modified="2025-04-20 12:14:37",revision=4963]]
 -- round information
 -- cubee
 
@@ -9,6 +9,8 @@ Round = {
 	garbage = {},
 	minDuration = 100,
 	intermission = 0,
+	flawless = true,
+	warning = 0,
 }
 
 function Round.createHandler(data)
@@ -29,6 +31,8 @@ function Round.beginNext()
 	Round.tick = 0
 	Round.handlers = {}
 	Round.minDuration = Round.getDuration(r)
+	Round.flawless = true
+	Round.warning = 0
 end
 
 function Round.getDuration(roundData)
@@ -36,7 +40,7 @@ function Round.getDuration(roundData)
 
 	local length = 0
 	for data in all(roundData) do
-		length += (data.amount - 1) * data.spacing
+		length += (data.amount - 1) * data.spacing + 1
 	end
 
 	return length
@@ -68,6 +72,7 @@ function Round.updateAll()
 	end
 
 	Round.tick += 1
+	Round.warning = max(Round.warning - 1, 0)
 
 	if Round.tick >= Round.minDuration and (#Enemy.enemies == 0) then
 		return 0
@@ -80,7 +85,7 @@ function Round.update(h)
 	local data = h.data
 	if (Round.index > #rounds) return
 
-	if h.t <= data.amount * data.spacing then
+	if h.t < data.amount * data.spacing then
 
 		if h.t % data.spacing == 0 then
 			local enID = data.entrances[h.entranceIndex]
@@ -226,7 +231,7 @@ rounds = {
 
 
 	{
-		tip = "This round, enemies come from both upper portals. Prepare accordingly!",
+		tip = "This round, enemies enter from both upper portals. Prepare accordingly!",
 		{
 			tick = 0,
 			type = Pop,
@@ -251,19 +256,19 @@ rounds = {
 	},
 
 	{
-		tip = "A mix of more enemies, from the lower portals.",
+		tip = "A mix of more enemies, coming from the lower portals.",
 		{
 			tick = 0,
 			type = Strobe,
 			amount = 1,
-			spacing = 20,
+			spacing = 0,
 			entrances = {3},
 		},
 		{
 			tick = 120,
 			type = Strobe,
 			amount = 1,
-			spacing = 20,
+			spacing = 0,
 			entrances = {4},
 		},
 		{
@@ -274,7 +279,7 @@ rounds = {
 			entrances = {3},
 		},
 		{
-			tick = 400,
+			tick = 420,
 			type = Pop,
 			amount = 30,
 			spacing = 10,
@@ -283,7 +288,7 @@ rounds = {
 	},
 
 	{
-		tip = "The enemies are using 3 portals now.",
+		tip = "The enemies will use up to 3 portals from now on.",
 		{
 			tick = 0,
 			type = Strobe,
@@ -308,11 +313,11 @@ rounds = {
 	},
 
 	{
-		tip = "Did someone say disco? ...No? Oh. Well something's going on downstairs.",
+		tip = "Did someone say disco? ...No? Well... there's something going on downstairs.",
 		{
 			tick = 60,
-			type = Strobe,
-			amount = 6,
+			type = ProudStrobe,
+			amount = 10,
 			spacing = 100,
 			entrances = {3, 4},
 		},

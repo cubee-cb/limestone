@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 01:48:27",modified="2025-04-18 20:52:32",revision=3436]]
+--[[pod_format="raw",created="2025-04-17 01:48:27",modified="2025-04-20 12:14:37",revision=3955]]
 -- pop enemy
 -- cubee
 
@@ -54,7 +54,7 @@ Pop = {
 
 		-- contact damage to target
 		if aabb(_ENV, target) then
-			target:damage(1)
+			target:damage(1, _ENV)
 			add(garbage, _ENV)
 		end
 

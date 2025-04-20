@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-18 14:14:25",modified="2025-04-18 20:52:32",revision=1444]]
+--[[pod_format="raw",created="2025-04-18 14:14:25",modified="2025-04-20 12:14:37",revision=1988]]
 -- projectile
 -- cubee
 
@@ -35,8 +35,10 @@ Projectile = setmetatable({
 		if init then
 			return
 		end
+		x += xv
 		y += yv
 		sprite = 1
+		s = damage / 4 + 0.75
 
 	end,
 
@@ -76,10 +78,28 @@ Projectile = setmetatable({
 		a = deltaToAngle(xv, yv)
 	end,
 
+	flame = function(_ENV, init)
+		if init then
+			lifespan = 60
+			hitbox = {w = 12, h = 8}
+			return
+		end
+		sprite = 2
+		yv = -0.5
+		xv *= 0.97
+		yv *= 0.97
+		x += xv
+		y += yv
+
+		sprite = 8 + t % 20 \ 5
+		flip = t % 12 < 6
+		s = 0.5 + (1 - ((1 - lifespan / lifespanMax) ^ 2))
+	end,
+
 }, {__index = Entity})
 
 -- create projectile
-function Projectile:create(u, x, y, xv, yv, damage)
+function Projectile:create(u, x, y, xv, yv, damage, owner)
 	x = x or 128
 	y = y or 16
 
@@ -101,6 +121,7 @@ function Projectile:create(u, x, y, xv, yv, damage)
 		damage = damage or 1,
 		friendly = true,
 		collideGround = true,
+		owner = owner,
 
 	}, {__index = Projectile})
 
@@ -155,7 +176,7 @@ function Projectile.update(_ENV)
 		for e in all(Enemy.enemies) do
 			if aabb(_ENV, e) then
 				lifespan = 0
-				e:damage(damage)
+				e:damage(damage, owner)
 				break
 			end
 		end

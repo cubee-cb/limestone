@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 13:09:27",modified="2025-04-18 20:52:32",revision=5176]]
+--[[pod_format="raw",created="2025-04-15 13:09:27",modified="2025-04-20 12:14:37",revision=5695]]
 -- particle
 -- cubee
 
@@ -50,8 +50,8 @@ function Particle:create(u, x, y, xv, yv)
 		t = 0,
 		x = x,
 		y = y,
-		xv = xv or rnd(4) - 1,
-		yv = yv or rnd(4) - 1,
+		xv = xv or rnd(4) - 2,
+		yv = yv or rnd(4) - 2,
 		a = 0,
 		av = 0,
 		hitbox = {w = 4, h = 4},

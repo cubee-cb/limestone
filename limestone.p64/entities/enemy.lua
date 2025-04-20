@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 01:28:55",modified="2025-04-18 20:52:32",revision=6182]]
+--[[pod_format="raw",created="2025-04-15 01:28:55",modified="2025-04-20 12:14:37",revision=6708]]
 -- enemies base
 -- cubee
 
@@ -67,8 +67,8 @@ function Enemy.updateAll()
 	cx /= #Enemy.enemies
 	cy /= #Enemy.enemies
 
-	for p in all(Enemy.garbage) do
-		del(Enemy.enemies, p)
+	for e in all(Enemy.garbage) do
+		del(Enemy.enemies, e)
 	end
 
 	return cx, cy
@@ -113,4 +113,16 @@ function Enemy.draw(_ENV)
 --[[
 	print(cmget((x)/8,(y+4)/8), x + 16, y, 9)
 	print(target.x .." " .. target.y, x + 16, y+8, 9)]]
+end
+
+function Enemy.damage(t, damage, source)
+	if (t.hp <= 0) return
+	t.hp -= damage
+	sfx(8)
+
+	if t.hp <= 0 and source and source.equipment then
+		for slot, item in pairs(source.equipment) do
+			if (item.onKill) item:onKill(t)
+		end
+	end
 end

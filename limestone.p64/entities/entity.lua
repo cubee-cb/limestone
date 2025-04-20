@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 02:20:17",modified="2025-04-18 20:52:32",revision=5890]]
+--[[pod_format="raw",created="2025-04-15 02:20:17",modified="2025-04-20 12:14:37",revision=6412]]
 -- entity
 -- cubee
 
@@ -104,7 +104,8 @@ function Entity.aabb(a, b)
 	)
 end
 
-function Entity.damage(t, damage)
+function Entity.damage(t, damage, source)
+	if (t.hp <= 0) return
 	t.hp -= damage
 	sfx(8)
 end

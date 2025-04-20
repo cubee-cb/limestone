@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-18 20:52:32",revision=7454]]
+--[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-20 12:14:37",revision=7975]]
 -- player
 -- cubee
 
@@ -365,13 +365,7 @@ function Player.update(_ENV)
 		else
 			for e in all(Enemy.enemies) do
 				if aabb(_ENV, e) then
-					e:damage(1)
-					if e.hp <= 0 then
-						-- run item kill events
-						for slot, content in pairs(equipment) do
-							if (content.onKill) content:onKill(e)
-						end
-					end
+					e:damage(1, _ENV)
 				end
 			end
 		end

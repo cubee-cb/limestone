@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 11:45:14",modified="2025-04-18 20:52:32",revision=3026]]
+--[[pod_format="raw",created="2025-04-17 11:45:14",modified="2025-04-20 12:14:37",revision=3551]]
 -- store item
 -- cubee
 
@@ -148,6 +148,13 @@ function StoreItem.purchase(owner, item)
 			owner.equipment[slot].level = 1
 			sfx(5)
 			owner.points["normal"] -= item.value
+			
+			-- remove incompatible items from the pool
+			if item.data.incompatible then
+				for i in all(item.data.incompatible) do
+					Item[i].hideFromPool = true
+				end
+			end
 			return item.data
 		end
 
