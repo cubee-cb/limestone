@@ -1,16 +1,16 @@
 # limestone (internal name) / Midlink (working title)
 
-it really has nothing to do with limestone, that's just the first name that came to mind cause the level is grey
+It really has nothing to do with limestone, that's just the first name that came to mind cause the level is grey.
 
-release version is currently on commit `c4fd4b3`, [here on itch.io](https://pixelshock.itch.io/midlink?password=midlink)
+Release version is currently on commit `c4fd4b3`, [here on itch.io](https://pixelshock.itch.io/midlink?password=midlink).
 
 ---
 
-anyway i'd call this a "horde defence" game
+Anyway I'd call this a "horde defence" game.
 
-it's like if vampire survivors was a platformer but also had a tower to defend
+It's kinda like if Vampire Survivors was a platformer but also had a tower to defend.
 
-takes elements from the following:
+Takes elements from the following:
 - Vampire Survivors
     - Points from enemies.
     - "Store" with upgrades.
@@ -19,6 +19,7 @@ takes elements from the following:
     - Round structure.
 - Towerfall
     - Randomised entrances.
+    - Manual aiming.
 - References
     - Gunboots
         - Based on Downwell's gunboots.
