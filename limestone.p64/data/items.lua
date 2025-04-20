@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 11:53:59",modified="2025-04-20 14:59:39",revision=3742]]
+--[[pod_format="raw",created="2025-04-17 11:53:59",modified="2025-04-20 15:17:33",revision=3754]]
 -- items
 -- cubee
 
@@ -186,14 +186,14 @@ Item = {
 	longClawDash = {
 		sprite = 27, --11,
 		name = "Telefragger",
-		desc = "Teleport into enemies to damage them.",
+		desc = "Press attack in the air to Telefrag targeted enemies.",
 		value = 75,
 		--slot = "arms",
 		maxLevel = 5,
 		incompatible = {"grappleTongue"},
 		init = function(self, owner, origin)
 			self.target = false
-			self.cooldown = 120
+			self.cooldown = 60
 			self.ticks = 0
 		end,
 		update = function(self, owner)
@@ -204,7 +204,7 @@ Item = {
 			-- start teleports
 			if btnp(5) and self.target then
 				self.ticks = self.level
-				self.cooldown = 130 - (self.level * 10)
+				self.cooldown = 80 + (self.level * 20)
 			end
 
 			-- teleport to closest target
