@@ -35,9 +35,9 @@ Takes elements from the following:
         - Based on Lilith's spirit power from 20 Minutes Till Dawn.
         - behaves like the Demond Ghosts from New Game+ mode in Ninja Cat Remewstered.
     - Blade Aura
-        - Maelstrom ability brom Bloons Tower Defence.
+        - Maelstrom ability from Bloons Tower Defence.
     - Big Rock
-        - Yuuto Ichika's boulder from Super Ledgehop: Double Laser. (+ her Rivals of Aether mod)
+        - Yuuto Ichika's boulder from Super Ledgehop: Double Laser, and her Rivals of Aether mod.
     - Telefragger
         - Functionality based on Quake's telefrags and Sonic's Homing Attack.
             - It only "telefrags" enemies with less health that it does damage, but it has high damage to compensate.

@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 11:53:59",modified="2025-04-20 15:17:33",revision=3754]]
+--[[pod_format="raw",created="2025-04-17 11:53:59",modified="2025-04-21 05:35:40",revision=3800]]
 -- items
 -- cubee
 
@@ -295,11 +295,12 @@ Item = {
 		maxLevel = 5,
 		incompatible = {"stilts", "wings"},
 		init = function(self, owner, origin)
-			self.maxAmmo = 6 + self.level * 2
+			self.maxAmmo = 7 + self.level
 			self.ammo = self.maxAmmo
+			self.canFire = false
 		end,
 		update = function(self, owner)
-			if self.ammo > 0 and owner.yv >= 0 and btnp(4) then
+			if self.ammo > 0 and self.canFire and btnp(4) then
 				owner.yv = min(owner.yv, -0.5)
 				self.ammo -= 1
 				sfx(self.ammo > 2 and 15 or self.ammo > 0 and 16 or self.ammo <= 0 and 17)
@@ -313,6 +314,8 @@ Item = {
 				self.ammo = self.maxAmmo
 				sfx(13)
 			end
+			
+			self.canFire = owner.air and owner.wallslide == 0
 		
 			self.ammo = mid(0, self.ammo, self.maxAmmo)
 		end,
