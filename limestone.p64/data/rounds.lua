@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-16 00:37:01",modified="2025-04-21 07:29:33",revision=5216]]
+--[[pod_format="raw",created="2025-04-16 00:37:01",modified="2025-04-21 11:36:41",revision=5338]]
 -- round information
 -- cubee
 
@@ -324,10 +324,10 @@ rounds = {
 	},
 
 	{
-		tip = "Introducing: Cannons! They follow the player and shoot heavy ice chunks.",
+		tip = "Introducing: Cannons! These ones shoot heavy ice chunks at the player.",
 		{
 			tick = 0,
-			type = Cannon,
+			type = CryoCannon,
 			amount = 2,
 			spacing = 600,
 			entrances = {3, 4},

@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-21 07:29:33",revision=8187]]
+--[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-21 11:36:41",revision=8302]]
 -- player
 -- cubee
 
@@ -29,6 +29,7 @@ function Player:create(x, y)
 		canWallJump = false,
 		jumps = 0,
 		maxJumps = 1,
+		jumpGrace = 8,
 
 		hp = 100,
 
@@ -168,6 +169,9 @@ function Player.update(_ENV)
 
 	if (gravity) yv += grv * (btn(3) and 3 or 1) * gs
 	if (canWallJump and wallslide ~= 0) yv = min(yv, btn(3) and 1.5 or 0.5)
+
+	-- expire the main jump
+	if (jumpGrace <= 0 and jumps == maxJumps) jumps -= 1
 
 	-- jumping and wall jumping
 	if btnp(4) then
@@ -311,6 +315,7 @@ function Player.update(_ENV)
 				yv, air = 0
 				fall_distance = 0
 				jumps = maxJumps
+				jumpGrace = 8
 				wallslide = 0
 				y += d
 				lastPlatformY = y \ 8
@@ -386,6 +391,7 @@ function Player.update(_ENV)
 		if (content.update) content:update(_ENV)
 	end
 
+	jumpGrace = max(jumpGrace - 1)
 	t = max(t + 1)
 
 	-- return camera position

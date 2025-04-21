@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 13:09:27",modified="2025-04-20 14:43:34",revision=5703]]
+--[[pod_format="raw",created="2025-04-15 13:09:27",modified="2025-04-21 11:36:41",revision=5741]]
 -- particle
 -- cubee
 
@@ -21,6 +21,7 @@ Particle = setmetatable({
 
 		s = (lifespan / 30) ^ 2
 	end,
+	
 	smoke = function(_ENV, init)
 		if init then
 			lifespan = 80 + rnd(60)
@@ -37,6 +38,25 @@ Particle = setmetatable({
 		a += av
 
 		sprite = 6 - (lifespan / lifespanMax * 3.9) \ 1
+		s = 0.5 + (lifespan / lifespanMax)
+	end,
+	
+	smokeLight = function(_ENV, init)
+		if init then
+			lifespan = 80 + rnd(60)
+			--a = rnd()
+			--av = (rnd(2)-1) / 500
+			s = 0.8 + rnd(0.4)
+			return
+		end
+		sprite = 2
+		yv = -0.2
+		xv *= 0.97
+		x += xv
+		y += yv
+		a += av
+
+		sprite = 14 - (lifespan / lifespanMax * 3.9) \ 1
 		s = 0.5 + (lifespan / lifespanMax)
 	end,
 }, {__index = Entity})
