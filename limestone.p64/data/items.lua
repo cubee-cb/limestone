@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 11:53:59",modified="2025-04-21 05:35:40",revision=3800]]
+--[[pod_format="raw",created="2025-04-17 11:53:59",modified="2025-04-21 05:46:13",revision=3809]]
 -- items
 -- cubee
 
@@ -202,7 +202,7 @@ Item = {
 			if ((not owner.air or self.cooldown > 0) and self.ticks <= 0) self.target = false
 
 			-- start teleports
-			if btnp(5) and self.target then
+			if btnp(5) and self.target and self.ticks <= 0 then
 				self.ticks = self.level
 				self.cooldown = 80 + (self.level * 20)
 			end
