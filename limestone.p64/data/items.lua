@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 11:53:59",modified="2025-04-21 05:46:13",revision=3809]]
+--[[pod_format="raw",created="2025-04-17 11:53:59",modified="2025-04-21 07:29:33",revision=3986]]
 -- items
 -- cubee
 
@@ -207,19 +207,26 @@ Item = {
 				self.cooldown = 80 + (self.level * 20)
 			end
 
+			-- use however many ticks it requires to smite this enemy
+			local baseDamage = 4 + self.level
+			local ticksToSmite = 1
+			if self.target then
+				ticksToSmite = max(ceil(self.target.hp / baseDamage), 1)
+			end
+
 			-- teleport to closest target
-			if self.cooldown % 5 == 0 and self.ticks > 0 then
+			if self.cooldown % 5 == 0 and self.ticks >= ticksToSmite then
 				if self.target then
 					sfx(24)
 					owner.x = self.target.x
 					owner.y = self.target.y - self.target.hitbox.h + 4
 					owner.yv = -3.5
 					owner.xv = self.target.x < owner.x and -2 or 2
-					self.target:damage(4 + self.level, owner)
+					self.target:damage(baseDamage * ticksToSmite, owner)
 				else
 					--sfx()
 				end
-				self.ticks -= 1
+				self.ticks -= ticksToSmite
 			end
 
 			self.cooldown = max(self.cooldown - 1, -1)
@@ -235,6 +242,7 @@ Item = {
 				rspr(owner.gfx[136 + owner.t % 20 \ 10].bmp, self.target.x, self.target.y - self.target.hitbox.h, s, s, owner.t / 100)
 			end
 			--print(self.ticks, owner.x, owner.y)
+			
 		end,
 	},
 
@@ -269,7 +277,7 @@ Item = {
 		draw = function(self, owner)
 		end,
 	},
-	
+
 	autoGuns = {
 		hideFromPool = true,
 		sprite = 14,
@@ -331,7 +339,7 @@ Item = {
 	spectre = {
 		sprite = 16,
 		name = "Spectral Impulse",
-		desc = "Defeated enemies release spectres that damage other enemies.",
+		desc = "Defeated enemies launch spectres that damage other enemies.",
 		value = 60,
 		--slot = "arms",
 		maxLevel = 5,

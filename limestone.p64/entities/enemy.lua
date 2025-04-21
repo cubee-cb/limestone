@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 01:28:55",modified="2025-04-20 14:43:34",revision=6716]]
+--[[pod_format="raw",created="2025-04-15 01:28:55",modified="2025-04-21 07:29:33",revision=6823]]
 -- enemies base
 -- cubee
 
@@ -34,6 +34,8 @@ function Enemy:create(data, x, y)
 		myUpdate = myData.update,
 		myDraw = myData.draw,
 
+		state = 0,
+		stateTimer = 0,
 		jumpTimer = 0,
 		deathTimer = 120,
 		dyingWish = false,

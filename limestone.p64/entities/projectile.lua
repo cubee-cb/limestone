@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-18 14:14:25",modified="2025-04-21 05:46:13",revision=2072]]
+--[[pod_format="raw",created="2025-04-18 14:14:25",modified="2025-04-21 07:29:33",revision=2253]]
 -- projectile
 -- cubee
 
@@ -96,6 +96,17 @@ Projectile = setmetatable({
 		s = 0.5 + (1 - ((1 - lifespan / lifespanMax) ^ 2))
 	end,
 
+	snowball = function(_ENV, init)
+		if init then
+			hitbox = {w = 8, h = 8}
+			return
+		end
+		x += xv
+		y += yv
+
+		sprite = 16
+	end,
+
 }, {__index = Entity})
 
 -- create projectile
@@ -119,7 +130,7 @@ function Projectile:create(u, x, y, xv, yv, damage, owner)
 		lifespan = 600,
 		lifespanMax = 600,
 		damage = damage or 1,
-		friendly = true,
+		friendly = owner == player,
 		collideGround = true,
 		owner = owner,
 
@@ -161,15 +172,6 @@ function Projectile.update(_ENV)
 
 	myUpdate(_ENV)
 
-	lifespan -= #Projectile.projectiles > 100 and 30 or 1
-
-	if lifespan <= 0 or (fget(cmget(x, y), 0) and collideGround) then
-		add(garbage, _ENV)
-		for i = 1, 5 do
-			Particle:create(Particle.dust, x, y)
-		end
-	end
-
 	-- damage things
 	if friendly then
 		-- enemies, enemy projectiles
@@ -182,6 +184,32 @@ function Projectile.update(_ENV)
 		end
 	else
 		-- player, exits
+		for e in all(Exit.exits) do
+			if aabb(_ENV, e) then
+				lifespan = 0
+				e:damage(damage, owner)
+				break
+			end
+		end
+
+		for p in all(Player.players) do
+			if aabb(_ENV, p) then
+				lifespan = 0
+				--p:damage(damage, owner)
+				p.yv = yv * 0.8 - 2
+				p.xv = xv * 0.8 -- 3 * sgn(p.x - x)
+				break
+			end
+		end
+	end
+
+	lifespan -= #Projectile.projectiles > 100 and 30 or 1
+
+	if lifespan <= 0 or (fget(cmget(x, y), 0) and collideGround) then
+		add(garbage, _ENV)
+		for i = 1, 5 do
+			Particle:create(Particle.dust, x, y)
+		end
 	end
 
 	t = max(t + 1)

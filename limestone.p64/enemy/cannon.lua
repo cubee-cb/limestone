@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-18 17:09:45",modified="2025-04-21 05:46:13",revision=1386]]
+--[[pod_format="raw",created="2025-04-18 17:09:45",modified="2025-04-21 07:29:33",revision=1582]]
 -- cannon enemy
 -- cubee
 
@@ -18,14 +18,45 @@ Cannon = {
 			acc /= 3
 		end
 
+		local goLeft, goRight = false, false
+
+		-- normal
+		if state == 0 then
+			goLeft = target.x < x
+			goRight = target.x > x
+
+			-- fire at player
+			if abs(target.x - x) <= 80 and abs(target.y - y) <= 24 then
+				stateTimer = 60
+				state = 1
+			end
+
+		-- shooting
+		elseif state == 1 then
+			-- fire
+			if stateTimer <= 0 then
+				local s = 6
+				Projectile:create(Projectile.snowball, x + (flip and -12 or 12), y - 18, flip and -s or s, -0.25, 10, _ENV)
+				state = 2
+				stateTimer = 30
+			end
+
+		-- recovery
+		elseif state == 2 then
+			-- return to normal
+			if stateTimer <= 0 then
+				state = 0
+			end
+		end
+
 		-- left
-		if target.x < x and jumpTimer < 0 then
+		if goLeft and jumpTimer < 0 then
 	
 			if (xv >- top) xv -= acc
 			flip = true
 
 		-- right
-		elseif target.x > x and jumpTimer < 0 then
+		elseif goRight and jumpTimer < 0 then
 
 			if (xv < top) xv += acc
 			flip = false
@@ -64,6 +95,13 @@ Cannon = {
 		if (jumpTimer > 0) sprite = 29
 		if (air) sprite = 30
 
+		if state == 1 then
+			sprite = 27 + t % 20 \ 10
+		elseif state == 2 then
+			sprite = ({25, 29, 26, 26})[stateTimer \ 10 + 1]
+		end
+
+		stateTimer = max(stateTimer - 1)
 	end,
 	draw = function(_ENV)
 		spr(gfx[sprite].bmp, x - 16, y - 32, flip)

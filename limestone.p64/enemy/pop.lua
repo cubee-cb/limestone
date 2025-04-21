@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 01:48:27",modified="2025-04-21 05:46:13",revision=4052]]
+--[[pod_format="raw",created="2025-04-17 01:48:27",modified="2025-04-21 07:29:33",revision=4220]]
 -- pop enemy
 -- cubee
 
@@ -73,6 +73,16 @@ Pop = {
 	end,
 	draw = function(_ENV)
 		spr(gfx[sprite].bmp, x - 8, y - 16, flip)
+
+	end
+}
+
+ChunkyPop = {
+	hp = 5,
+	value = 4,
+	update = Pop.update,
+	draw = function(_ENV)
+		spr(gfx[sprite + 64].bmp, x - 8, y - 16, flip)
 
 	end
 }

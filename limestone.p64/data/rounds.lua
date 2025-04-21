@@ -1,10 +1,10 @@
---[[pod_format="raw",created="2025-04-16 00:37:01",modified="2025-04-21 05:46:13",revision=5048]]
+--[[pod_format="raw",created="2025-04-16 00:37:01",modified="2025-04-21 07:29:33",revision=5216]]
 -- round information
 -- cubee
 
 Round = {
 	tick = 0,
-	index = 1,
+	index = 11,
 	handlers = {},
 	garbage = {},
 	minDuration = 100,
@@ -324,7 +324,7 @@ rounds = {
 	},
 
 	{
-		tip = "Introducing: Cannons! They follow the player. They are also not finished.",
+		tip = "Introducing: Cannons! They follow the player and shoot heavy ice chunks.",
 		{
 			tick = 0,
 			type = Cannon,
