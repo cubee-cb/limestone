@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 01:48:27",modified="2025-04-21 11:36:41",revision=4334]]
+--[[pod_format="raw",created="2025-04-17 01:48:27",modified="2025-04-22 06:16:28",revision=4406]]
 -- pop enemy
 -- cubee
 
@@ -32,8 +32,8 @@ Pop = {
 
 		elseif xv ~= 0 then
 			-- friction
-			xv -= sgn(xv) / 15
-			if abs(xv) <= 0.07 then
+			xv -= sgn(xv) / 5
+			if abs(xv) <= 0.05 then
 				xv = 0
 			end
 		end
@@ -41,7 +41,7 @@ Pop = {
 		yv += grv
 
 		-- jumping
-		if not air and jumpTimer <= 0 and target.y < y - 8 and (fget(cmget(x - 16, y - 4), 0) or fget(cmget(x + 16, y - 4), 0)) then
+		if not air and jumpTimer <= 0 and fget(cmget(x + (flip and -16 or 16), y - 4), 0) then
 			jumpTimer = 10
 		end
 		jumpTimer = max(jumpTimer - 1, -1)

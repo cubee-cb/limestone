@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-18 14:14:25",modified="2025-04-21 11:36:41",revision=2369]]
+--[[pod_format="raw",created="2025-04-18 14:14:25",modified="2025-04-22 06:16:28",revision=2445]]
 -- projectile
 -- cubee
 
@@ -101,6 +101,7 @@ Projectile = setmetatable({
 			hitbox = {w = 8, h = 8}
 			return
 		end
+		yv += 0.1
 		x += xv
 		y += yv
 
@@ -179,6 +180,7 @@ function Projectile.update(_ENV)
 			if aabb(_ENV, e) then
 				lifespan = 0
 				e:damage(damage, owner)
+				sfx(28)
 				break
 			end
 		end
@@ -188,6 +190,7 @@ function Projectile.update(_ENV)
 			if aabb(_ENV, e) then
 				lifespan = 0
 				e:damage(damage, owner)
+				sfx(27)
 				break
 			end
 		end
@@ -196,6 +199,7 @@ function Projectile.update(_ENV)
 			if aabb(_ENV, p) then
 				lifespan = 0
 				--p:damage(damage, owner)
+				sfx(27)
 				p.yv = yv * 0.8 - 2
 				p.xv = xv * 0.8 -- 3 * sgn(p.x - x)
 				break

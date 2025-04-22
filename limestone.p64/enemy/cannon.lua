@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-18 17:09:45",modified="2025-04-21 11:36:41",revision=1719]]
+--[[pod_format="raw",created="2025-04-18 17:09:45",modified="2025-04-22 06:16:28",revision=1804]]
 -- cannon enemy
 -- cubee
 
@@ -68,7 +68,7 @@ local cannonUpdate = function(_ENV)
 	yv += grv
 
 	-- jumping
-	if not air and jumpTimer <= 0 and target.y < y - 8 and (fget(cmget(x - 16, y - 4), 0) or fget(cmget(x + 16, y - 4), 0)) then
+	if not air and jumpTimer <= 0 and fget(cmget(x + (flip and -24 or 24), y - 4), 0) then
 		jumpTimer = 60
 	end
 	jumpTimer = max(jumpTimer - 1, -1)
@@ -111,6 +111,9 @@ CryoCannon = {
 		for a=-1, 1 do
 			local s = 4 + a
 			Particle:create(Particle.smokeLight, x + (flip and -12 or 12), y - 18 + a * 4, (flip and -s or s) * (0.2 + rnd(0.5)), 0)
+			sfx(26)
+			v = 2
+			xv = flip and v or -v
 		end
 	end,
 	update = cannonUpdate,
@@ -128,6 +131,9 @@ PyroCannon = {
 			local s = 4 + a
 			Projectile:create(Projectile.flame, x + (flip and -12 or 12), y - 18 + a * 4, flip and -s or s, 0, 4, _ENV)
 			Particle:create(Particle.smoke, x + (flip and -12 or 12), y - 18 + a * 4, (flip and -s or s) * (0.2 + rnd(0.5)), 0)
+			sfx(25)
+			v = 1
+			xv = flip and v or -v
 		end
 	end,
 	update = cannonUpdate,

@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-16 00:37:01",modified="2025-04-21 11:36:41",revision=5338]]
+--[[pod_format="raw",created="2025-04-16 00:37:01",modified="2025-04-22 06:16:28",revision=5408]]
 -- round information
 -- cubee
 
@@ -331,6 +331,13 @@ rounds = {
 			amount = 2,
 			spacing = 600,
 			entrances = {3, 4},
+		},
+		{
+			tick = 1200,
+			type = Pop,
+			amount = 64,
+			spacing = 20,
+			entrances = {1, 2},
 		},
 	},
 

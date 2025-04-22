@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-18 16:15:13",modified="2025-04-21 11:36:41",revision=1932]]
+--[[pod_format="raw",created="2025-04-18 16:15:13",modified="2025-04-22 06:16:28",revision=2007]]
 -- strobe enemy
 -- cubee
 
@@ -85,13 +85,13 @@ Strobe = {
 		yv += grv
 
 		-- jumping
-		if not air and jumpTimer <= 0 and target.y < y - 8 and (fget(cmget(x - 16, y - 4), 0) or fget(cmget(x + 16, y - 4), 0)) then
+		if not air and jumpTimer <= 0 and fget(cmget(x + (flip and -16 or 16), y - 4), 0) then
 			jumpTimer = 60
 		end
 		jumpTimer = max(jumpTimer - 1, -1)
 		if jumpTimer == 0 then
 			yv = -jmp
-			xv = flip and -top or top
+			--xv = flip and -top or top
 		end
 
 		standOnPlatforms = target.y <= y + 8 or abs(target.x - x) > 32
