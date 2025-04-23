@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 02:21:14",modified="2025-04-23 03:45:20",revision=4443]]
+--[[pod_format="raw",created="2025-04-17 02:21:14",modified="2025-04-23 04:01:27",revision=4500]]
 -- game screen
 -- cubee
 
@@ -148,6 +148,7 @@ GameMode.game = {
 
 	draw = function()
 		camera(cam_x - 240, cam_y - 120)
+		palt()
 
 		--[[
 		for i = #levelMap, 1, -1 do
@@ -157,6 +158,8 @@ GameMode.game = {
 
 		-- background
 		map(levelBack.bmp)
+		palt(0, false)
+		palt(17, true)
 		Entrance.drawAll()
 		Exit.drawAll()
 
@@ -164,8 +167,11 @@ GameMode.game = {
 
 		-- middleground
 		-- map layers
+		palt()
 		map(levelVisual.bmp)
 		if(db and db.collision)map(levelCollision.bmp)
+		palt(0, false)
+		palt(17, true)
 
 		-- entities
 		Enemy.drawAll()
@@ -176,7 +182,10 @@ GameMode.game = {
 
 		-- foreground
 		Particle.drawAll(true)
+		palt()
 		map(levelFore.bmp)
+		palt(0, false)
+		palt(17, true)
 
 		camera(0, 0)
 		cursor(32, 16)

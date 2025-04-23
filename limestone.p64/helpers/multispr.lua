@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-23 03:06:27",modified="2025-04-23 03:45:20",revision=165]]
+--[[pod_format="raw",created="2025-04-23 03:06:27",modified="2025-04-23 04:01:27",revision=221]]
 -- the epic multispr function
 -- by cubee
 -- ported to picotron, also by cubee
@@ -42,10 +42,8 @@ function multispr(sheet, frame, x, y, flip, scale)
 			rspr(frame, tx, ty, sc, sc, r)
 		end
 		
-		pset(tx,ty,8)
+		--pset(tx,ty,8)
 	
 	end
-	pset(x,y,7)
-
-
+	--pset(x,y,7)
 end

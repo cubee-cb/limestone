@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 11:45:14",modified="2025-04-20 14:43:34",revision=3559]]
+--[[pod_format="raw",created="2025-04-17 11:45:14",modified="2025-04-23 04:01:22",revision=3582]]
 -- store item
 -- cubee
 
@@ -106,7 +106,7 @@ function StoreItem.draw(_ENV)
 	rspr(gfx[data.sprite].bmp, x + a * 32, y - 8 - abs(a * 20), s, s, a)
 	fillp(0b0111110101111101)
 	fillp(0b1010010110100101)
-	circ(x, y - 8, interactionRange + sin(t / 120) * 1.5, collectable and 11 or 0x001d)
+	circ(x, y - 8, interactionRange + sin(t / 120) * 1.5, collectable and 0x110b or 0x111d)
 	fillp()
 	--debugVisuals(_ENV)
 	--?a,x,y
