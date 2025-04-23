@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-22 06:16:28",revision=8376]]
+--[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-23 03:45:20",revision=8563]]
 -- player
 -- cubee
 
@@ -402,7 +402,7 @@ end
 function Player.draw(_ENV)
 
 	local leg = (air or btn(5)) and -2 or xv != 0 and (sin(t / 30)) or 0
-
+--[[
 	-- rear arm
 	spr(gfx[73].bmp, x - 16 - leg, y - hitbox.h*2 - 8.5 + sin((t - 20) / 150) * 2, flip)
 
@@ -419,6 +419,19 @@ function Player.draw(_ENV)
 
 	-- front arm
 	spr(gfx[72].bmp, x - 16 + leg, y - hitbox.h*2 - 8.5 + sin((t - 20) / 150) * 2, flip)
+--]]
+	local vesselFrame = 0
+	local frame = {
+		{73, 0, -26, 0, 1, "backArm"},
+		{82, 3, 0, 0, 1, "backLeg"},
+		{64, 0, -26, 0, 1, "body"},
+		{vesselFrame, 0, -23, 0, 1, "vessel"},
+		{104, 0, -26, 0, 1, "head"},
+		{83, -4, 0, 0, 1, "frontLeg"},
+		{72, 0, -26, 0, 1, "frontArm"},
+	}
+
+	multispr(gfx, frame, x, y, flip, 1)
 
 	-- run item draws
 	for slot, content in pairs(equipment) do
@@ -449,4 +462,5 @@ function Player.draw(_ENV)
 	--print(slopeOffset)
 	print(jumps.."/"..maxJumps)
 	print("P:"..points.normal)]]
+	
 end

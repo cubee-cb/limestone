@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2024-03-18 18:22:30",modified="2025-04-22 06:16:28",revision=8301]]
+--[[pod_format="raw",created="2024-03-18 18:22:30",modified="2025-04-23 03:45:20",revision=8457]]
 -- limestone (internal name)
 -- by cubee
 
@@ -31,6 +31,7 @@ include("enemy/cannon.lua")
 include("helpers/motion.lua")
 include("helpers/map.lua")
 include("helpers/rspr.lua")
+include("helpers/multispr.lua")
 
 include("data/rounds.lua")
 include("data/items.lua")

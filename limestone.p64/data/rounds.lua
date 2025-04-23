@@ -1,10 +1,10 @@
---[[pod_format="raw",created="2025-04-16 00:37:01",modified="2025-04-22 06:16:28",revision=5408]]
+--[[pod_format="raw",created="2025-04-16 00:37:01",modified="2025-04-23 03:45:20",revision=5561]]
 -- round information
 -- cubee
 
 Round = {
 	tick = 0,
-	index = 11,
+	index = 1,
 	handlers = {},
 	garbage = {},
 	minDuration = 100,
