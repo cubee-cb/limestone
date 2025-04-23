@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 04:00:46",modified="2025-04-20 14:43:34",revision=3624]]
+--[[pod_format="raw",created="2025-04-17 04:00:46",modified="2025-04-23 04:13:31",revision=3688]]
 -- rspr.lua
 -- fletch_pico
 -- https://www.lexaloffle.com/bbs/?tid=141706
@@ -6,18 +6,22 @@
 edits by cubee:
 - make rspr use texture directly
 - don't clip tquad to screen height
+- add horizontal and vertical texture flipping
 ]]
 
-function rspr(tex,cx,cy,sx,sy,rot)
+function rspr(tex,cx,cy,sx,sy,rot,hflip,vflip)
 	sx = sx and sx or 1
 	sy = sy and sy or 1
 	rot = rot and rot or 0
 	local dx,dy = tex:width()*sx,tex:height()*sy
+	local u0, v0, u1, v1 =
+		(hflip and (tex:width()-0.001) or 0), (vflip and (tex:height()-0.001) or 0),
+		(hflip and 0 or (tex:width()-0.001)), (vflip and 0 or (tex:height()-0.001))
 	local quad = {
-		{x=0, y=0, u=0, v=0},
-		{x=dx, y=0, u=tex:width()-0.001, v=0},
-		{x=dx, y=dy, u=tex:width()-0.001, v=tex:height()-0.001},
-		{x=0, y=dy, u=0, v=tex:height()-0.001},
+		{x=0, y=0, u=u0, v=v0},
+		{x=dx, y=0, u=u1, v=v0},
+		{x=dx, y=dy, u=u1, v=v1},
+		{x=0, y=dy, u=u0, v=v1},
 	}
 	local c,s = cos(rot),-sin(rot)
 	local w,h = (dx-1)/2, (dy-1)/2
@@ -26,7 +30,7 @@ function rspr(tex,cx,cy,sx,sy,rot)
 		v.x = c*x-s*y
 		v.y = s*x+c*y	
 	end
-	tquad(quad, tex, cx, cy)
+	tquad(quad, tex, cx, cy, hflip)
 end
 
 function tquad(coords,tex,dx,dy)

@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-23 04:01:27",revision=8628]]
+--[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-23 04:13:31",revision=8678]]
 -- player
 -- cubee
 
@@ -428,7 +428,7 @@ function Player.draw(_ENV)
 		{vesselFrame, 0, -23, 0, 1, "vessel"},
 		{104, 0, -26, 0, 1, "head"},
 		{83, -4, 0, 0, 1, "frontLeg"},
-		{72, 0, -24, 0, 1, "frontArm"},
+		{72, 0, -24, 0.25, 1, "frontArm"},
 	}
 
 	multispr(gfx, frame, x, y, flip, 1)

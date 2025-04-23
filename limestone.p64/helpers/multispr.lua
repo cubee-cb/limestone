@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-23 03:06:27",modified="2025-04-23 04:01:27",revision=221]]
+--[[pod_format="raw",created="2025-04-23 03:06:27",modified="2025-04-23 04:13:31",revision=273]]
 -- the epic multispr function
 -- by cubee
 -- ported to picotron, also by cubee
@@ -34,12 +34,12 @@ function multispr(sheet, frame, x, y, flip, scale)
 		local frame = sheet[i].bmp
 		if (not frame) print("no gfx!", tx, ty) return
 		local w, h = frame:width(), frame:height()
-		if r == 0 then
+		if r == 0 and false then
 			local tw, th = ceil(w * sc), ceil(h * sc)
 			sspr(frame, 0, 0, w, h, tx - tw * 0.5, ty - th * 0.5, tw, th, flip)
 		else
 			--rspr(frame,tx,ty,r,0,0,w,h,flip,sc)
-			rspr(frame, tx, ty, sc, sc, r)
+			rspr(frame, tx, ty, sc, sc, r, flip)
 		end
 		
 		--pset(tx,ty,8)
