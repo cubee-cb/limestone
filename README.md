@@ -2,7 +2,25 @@
 
 It really has nothing to do with limestone, that's just the first name that came to mind cause the level is grey.
 
-Release version is currently on commit `c4fd4b3`, [here on itch.io](https://pixelshock.itch.io/midlink?password=midlink).
+Release version is currently on commit `c4fd4b3`, [here on itch.io](https://pixelshock.itch.io/midlink?password=midlink), lacking:
+- Couple new/edited rounds
+- Some new items, some reworked/rebalanced items.
+- Functional cannon enemy
+- General fixes
+- Etc...
+
+Currently on the table:
+- Proper player rendering
+    - With support for modifying the player's "model", like adding accessories and replacing parts.
+- Create more enemies
+- Add more rounds
+- Implement more items
+- Create body part items
+
+And future ideas:
+- More "vessels" that change how the player behaves or what they can do, maybe even item pools, vessel-specific items.
+- More arenas
+- Different round lists
 
 ---
 
