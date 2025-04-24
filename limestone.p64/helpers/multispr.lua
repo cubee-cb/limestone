@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-23 03:06:27",modified="2025-04-24 13:03:38",revision=350]]
+--[[pod_format="raw",created="2025-04-23 03:06:27",modified="2025-04-24 13:10:07",revision=364]]
 -- the epic multispr function
 -- by cubee
 -- ported to picotron, also by cubee

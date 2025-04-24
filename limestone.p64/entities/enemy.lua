@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-15 01:28:55",modified="2025-04-24 13:03:38",revision=7324]]
+--[[pod_format="raw",created="2025-04-15 01:28:55",modified="2025-04-24 13:10:07",revision=7340]]
 -- enemies base
 -- cubee
 
@@ -124,7 +124,7 @@ function Enemy.damage(t, damage, source)
 
 	if t.hp <= 0 and source and source.equipment then
 		for slot, item in pairs(source.equipment) do
-			if (item.onKill) item:onKill(t)
+			if (item.onKill) item:onKill(source, t)
 		end
 	end
 end

@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 11:53:59",modified="2025-04-24 13:03:38",revision=4487]]
+--[[pod_format="raw",created="2025-04-17 11:53:59",modified="2025-04-24 13:10:07",revision=4503]]
 -- items
 -- cubee
 
@@ -343,7 +343,7 @@ Item = {
 		value = 60,
 		--slot = "arms",
 		maxLevel = 5,
-		onKill = function(self, victim)
+		onKill = function(self, owner, victim)
 			Projectile:create(Projectile.spectre, victim.x, victim.y - victim.hitbox.h * 2, 0, -3, self.level / 2, owner)
 		end,
 	},
