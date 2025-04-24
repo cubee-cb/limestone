@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-23 04:13:31",revision=8678]]
+--[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-24 12:59:23",revision=8743]]
 -- player
 -- cubee
 
@@ -428,10 +428,14 @@ function Player.draw(_ENV)
 		{vesselFrame, 0, -23, 0, 1, "vessel"},
 		{104, 0, -26, 0, 1, "head"},
 		{83, -4, 0, 0, 1, "frontLeg"},
-		{72, 0, -24, 0.25, 1, "frontArm"},
+		{72, 0, -24, 0, 1, "frontArm"},
 	}
 
-	multispr(gfx, frame, x, y, flip, 1)
+	Multispr.drawFrame(gfx, frame, x, y, flip, 1)
+
+	--[[
+	local arm = Multispr.getPart(frame, "frontLeg", flip)
+	pset(x + arm[2], y + arm[3], 8)]]
 
 	-- run item draws
 	for slot, content in pairs(equipment) do
