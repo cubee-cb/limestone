@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-24 12:59:23",revision=8743]]
+--[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-24 13:03:38",revision=8754]]
 -- player
 -- cubee
 
@@ -422,6 +422,7 @@ function Player.draw(_ENV)
 --]]
 	local vesselFrame = 0
 	local frame = {
+		flip = flip,
 		{73, 0, -24, 0, 1, "backArm"},
 		{82, 3, 0, 0, 1, "backLeg"},
 		{64, 0, -26, 0, 1, "body"},
@@ -431,10 +432,10 @@ function Player.draw(_ENV)
 		{72, 0, -24, 0, 1, "frontArm"},
 	}
 
-	Multispr.drawFrame(gfx, frame, x, y, flip, 1)
+	Multispr.drawFrame(gfx, frame, x, y, 1)
 
 	--[[
-	local arm = Multispr.getPart(frame, "frontLeg", flip)
+	local arm = Multispr.getPart(frame, "frontLeg")
 	pset(x + arm[2], y + arm[3], 8)]]
 
 	-- run item draws

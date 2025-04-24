@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 02:21:14",modified="2025-04-24 12:59:23",revision=4601]]
+--[[pod_format="raw",created="2025-04-17 02:21:14",modified="2025-04-24 13:03:38",revision=4614]]
 -- game screen
 -- cubee
 
@@ -211,5 +211,7 @@ GameMode.game = {
 			print("\#2" .. (rounds[Round.index].tip or ""))
 			print("\#2\f6Press (X or V) near the crystal to end intermission early.")
 		end
+		
+		?"C: "..stat(1),1,1,13
 	end,
 }

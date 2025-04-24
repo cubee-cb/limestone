@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-23 03:06:27",modified="2025-04-24 12:59:23",revision=335]]
+--[[pod_format="raw",created="2025-04-23 03:06:27",modified="2025-04-24 13:03:38",revision=350]]
 -- the epic multispr function
 -- by cubee
 -- ported to picotron, also by cubee
@@ -22,26 +22,26 @@ Multispr = {}
 
 --uses sspr when ang == 0,
 --otherwise uses rspr
-function Multispr.drawFrame(sheet, frame, x, y, flip, scale)
+function Multispr.drawFrame(sheet, frame, x, y, scale)
 	scale = scale or 1
 	
 	for part in all(frame) do
 		
 		local i, sx, sy, r, s, bone = unpack(part)
 		r, s = r or 0, s or 1
-		if (flip) sx, r= -sx, -r
+		if (frame.flip) sx, r= -sx, -r
 		local sc, tx, ty = scale * s, flr(x + sx * scale), flr(y + sy * scale)
 
 		-- draw
-		local frame = sheet[i].bmp
-		if (not frame) print("no gfx!", tx, ty) return
-		local w, h = frame:width(), frame:height()
+		local gfx = sheet[i].bmp
+		if (not gfx) print("no gfx!", tx, ty) return
+		local w, h = gfx:width(), gfx:height()
 		if r == 0 and false then
 			local tw, th = ceil(w * sc), ceil(h * sc)
-			sspr(frame, 0, 0, w, h, tx - tw * 0.5, ty - th * 0.5, tw, th, flip)
+			sspr(gfx, 0, 0, w, h, tx - tw * 0.5, ty - th * 0.5, tw, th, frame.flip)
 		else
 			--rspr(frame,tx,ty,r,0,0,w,h,flip,sc)
-			rspr(frame, tx, ty, sc, sc, r, flip)
+			rspr(gfx, tx, ty, sc, sc, r, frame.flip)
 		end
 		
 		--pset(tx,ty,8)
@@ -54,7 +54,7 @@ function Multispr.getPart(frame, part, flip)
 	for i in all(frame) do
 		local i, x, y, r, s, partName = unpack(i)
 		if partName and partName == part then
-			return {i, flip and -x or x, y, r, s, partName}
+			return {i, frame.flip and -x or x, y, r, s, partName}
 		end
 	end
 	return {-1, 0, 0, 0, 0}
