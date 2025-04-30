@@ -10,12 +10,17 @@ Release version is currently on commit `c4fd4b3`, [here on itch.io](https://pixe
 - Etc...
 
 Currently on the table:
-- Proper player rendering
-    - With support for modifying the player's "model", like adding accessories and replacing parts.
+- Modifying the player's "model", like adding accessories and replacing parts. Needs:
+    - Proper player rendering. Needs:
+        - Multispr editor for Picotron Multispr
+- Proper player base attacks (punching, etc). Needs:
+    - Proper hitboxes implementation
+    - Arbitrary AABB function (current one specifically uses entity.hitbox)
 - Create more enemies
 - Add more rounds
 - Implement more items
-- Create body part items
+    - Finish more unimplemented upgrades
+    - Create body part items
 
 And future ideas:
 - More "vessels" that change how the player behaves or what they can do, maybe even item pools, vessel-specific items.
