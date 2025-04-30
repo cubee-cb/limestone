@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-17 11:53:59",modified="2025-04-24 13:10:07",revision=4503]]
+--[[pod_format="raw",created="2025-04-17 11:53:59",modified="2025-04-30 23:39:06",revision=4595]]
 -- items
 -- cubee
 
@@ -400,7 +400,7 @@ Item = {
 		hideFromPool = true,
 		sprite = 19,
 		name = "Blade Aura",
-		desc = "Spinning blades shred nearby enemies.",
+		desc = "Spinning magical blades shred nearby enemies.",
 		value = 75,
 		--slot = "arms",
 		maxLevel = 5,

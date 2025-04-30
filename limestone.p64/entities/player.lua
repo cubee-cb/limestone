@@ -1,4 +1,4 @@
---[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-24 13:10:07",revision=8769]]
+--[[pod_format="raw",created="2025-04-13 16:01:05",modified="2025-04-30 23:39:06",revision=8868]]
 -- player
 -- cubee
 
@@ -30,6 +30,12 @@ function Player:create(x, y)
 		jumps = 0,
 		maxJumps = 1,
 		jumpGrace = 8,
+		
+		attack = 0,
+		attackTimer = 0,
+		maxCombo = 3,
+		
+		attacks = Player.attacks,
 
 		hp = 100,
 
@@ -124,16 +130,18 @@ function Player.update(_ENV)
 		frc /= 3
 		dec = frc * 2
 	end
+	
+	local canWalk = attackTimer <= 0
 
 	-- left
-	if btn(0) then
+	if btn(0) and canWalk then
 		if (xv > 0 and not air)	Particle:create(Particle.dust, x, y, 1 + rnd(2), -0.5)
 
 		if (xv >- top) xv -= (xv > 0 and dec or acc) * gs
 		if (canturn) flip = true
 
 	-- right
-	elseif btn(1) then
+	elseif btn(1) and canWalk then
 		if (xv < 0 and not air)	Particle:create(Particle.dust, x, y, -1 - rnd(2), -0.5)
 
 		if (xv < top) xv += (xv < 0 and dec or acc) * gs
@@ -357,25 +365,48 @@ function Player.update(_ENV)
 		ground_last_y = y
 	end
 
-	if (btnp(5)) then
-		-- end intermission
-		if Round.intermission > 0 then
-			local exit, distance = Entity.closest(_ENV, Exit.exits)
-			if distance < 64 then
-				sfx(10)
-				Round.intermission = min(Round.intermission, 5)
+	-- end intermission
+	if Round.intermission > 0 and btnp(5) then
+		local exit, distance = Entity.closest(_ENV, Exit.exits)
+		if distance < 64 then
+			sfx(10)
+			Round.intermission = min(Round.intermission, 5)
+		end
+	end
+
+	-- attack enemies
+	if btn(5) then
+		if attack <= maxCombo and attackTimer <= 0 then
+			attack += 1
+			if attack > maxCombo then
+				attack = 1
 			end
 
-		-- attack enemies
-		else
+			local a = attacks[attack]
+			attackTimer = a.duration
+		end
+	elseif attackTimer <= 0 then
+		attack = 0
+	end
+
+	if attackTimer > 0 and attack > 0 then
+		local a = attacks[attack]
+
+		if attackTimer <= a.hitFrame and attackTimer > a.recovery then
+			local hits = 0
+			local pierce = a.pierce or 1
 			for e in all(Enemy.enemies) do
 				if aabb(_ENV, e) then
-					e:damage(1, _ENV)
+					e:damage(a.damage, _ENV)
+					hits += 1
+					-- stop damaging enemies if we reach the pierce limit
+					if (hits >= pierce) break
 				end
 			end
 		end
 
 	end
+
 
 	-- buy item
 	if Round.intermission > 0 then
@@ -392,6 +423,7 @@ function Player.update(_ENV)
 	end
 
 	jumpGrace = max(jumpGrace - 1)
+	attackTimer = max(attackTimer - 1)
 	t = max(t + 1)
 
 	-- return camera position
@@ -460,12 +492,39 @@ function Player.draw(_ENV)
 	end
 
 	debugVisuals(_ENV)
---[[
+---[[
 	cursor(x + 16, y - hitbox.h * 2 - 16)
 	--print(cmget((x)/8,(y+4)/8), x + 16, y, 9)
 	--print(x\8 .." " .. (y+4)\8, x + 16, y+8, 9)
 	--print(slopeOffset)
 	print(jumps.."/"..maxJumps)
-	print("P:"..points.normal)]]
+	print("P:"..points.normal)
+	print(""..attack.." "..attackTimer)--]]
 	
 end
+
+Player.attacks = {
+	-- basic combo
+	{duration = 20, damage = 1, hitFrame = 10, recovery = 5, pierce = 1, frames = {
+		{},
+		{},
+		{}
+	}},
+	{duration = 20, damage = 1, hitFrame = 10, recovery = 5, pierce = 1, frames = {
+		{},
+		{},
+		{}
+	}},
+	{duration = 50, damage = 2, hitFrame = 20, recovery = 10, pierce = 4, frames = {
+		{},
+		{},
+		{}
+	}},
+	{duration = 60, damage = 2, hitFrame = 20, recovery = 10, pierce = 4, frames = {
+		{},
+		{},
+		{}
+	}},
+	
+	-- other attacks
+}
